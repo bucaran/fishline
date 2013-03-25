@@ -69,7 +69,7 @@ function prompt_segment -d "Function to draw a segment"
   end
   set current_bg $argv[1]
   if [ -n "$argv[3]" ]
-    echo -n -s $argv[3] " "
+    echo -n $argv[3] " "
   end
 end
 
