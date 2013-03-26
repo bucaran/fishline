@@ -26,5 +26,5 @@ function fish_prompt
     end
   end
 
-  echo -n -s $cwd $red '|' $git_info $normal ⇒ ' ' $normal
+  echo -n $cwd$red'|'$git_info$normal⇒' '$normal
 end
