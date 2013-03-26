@@ -24,5 +24,5 @@ function fish_prompt
     end
   end
 
-  echo -n $cwd $git_info $normal ' ' $arrow ' '
+  echo -n $cwd$git_info$normal' '$arrow' '
 end
