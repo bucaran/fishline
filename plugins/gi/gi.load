@@ -1,6 +1,18 @@
 # gitignore.io cli for fish
 #
 
-function gi
-  curl http://gitignore.io/api/$argv
+
+function gi -d 'gitinore.io cli for fish'
+  # parameters can be passed separated by ',' or by space
+  set -l params (echo $argv|tr ' ' ',')
+  curl http://gitignore.io/api/$params
 end
+
+
+# enable the complation by invoking `gi list`
+set -g gi_list 'NONE'
+if test $gi_list = 'NONE'
+  set gi_list (gi list| tr ',' ' ' ^/dev/null)
+end
+
+complete -c gi -a "$gi_list"
