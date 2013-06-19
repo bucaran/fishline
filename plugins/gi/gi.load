@@ -6,7 +6,11 @@ function gi
 	set -l res ''
 	if test (count $argv) = 1 -a $argv[1] = 'list'
 		set res (curl http://gitignore.io/api/list | tr ',' '\n' | sort ^/dev/null)
-		emit gi_list_updated $res
+		if test (count $res) > 1
+			emit gi_list_updated $res
+		end
+		echo $res
+		return
 	else
 		set args 
 		if contains 'list' $argv
@@ -20,19 +24,16 @@ function gi
 			set args $argv
 		end
 		set -l params (echo $args|tr ' ' ',')
-		set res (curl http://gitignore.io/api/$params)
+		curl http://gitignore.io/api/$params
 	end
-	
-	echo $res | tr ',' '\n'
 end
 
 function _upd_mem --on-event gi_list_updated
-	echo "---- _upd_mem"
-	set -U _gi_list $argv	
+	set -U _gi_list $argv
 end
 
 function _upd_tmp_gilis --on-event gi_list_updated
-	echo $argv | tr ' ' '\n' > $tmp_gilist_fname	
+	echo $argv | tr ' ' '\n' > $tmp_gilist_fname		
 end
 
 # used to make the shell initialization more responsive.
