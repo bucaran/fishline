@@ -3,7 +3,7 @@
 set -g tmp_gilist_fname /tmp/.gi_list_updated # it can be always the same
 
 function gi
-	set -l res ''
+	set -l res 
 	if test (count $argv) = 1 -a $argv[1] = 'list'
 		set res (curl http://gitignore.io/api/list | tr ',' '\n' | sort ^/dev/null)
 		if test (count $res) > 1
@@ -36,17 +36,18 @@ function _upd_tmp_gilis --on-event gi_list_updated
 	echo $argv | tr ' ' '\n' > $tmp_gilist_fname		
 end
 
+
 # used to make the shell initialization more responsive.
 # see "The law of responsiveness" in `help design`
 # the latency ranking is: network, fs, memory
 # so the gi_list is searched first in memory, than fs and network
 function _get_gilist	
 	if not set -q -U _gi_list # search in memory			
-		if test -e $tmp_gilist_fname # then fs
+		if test -e $tmp_gilist_fname # then fs ... but the file cannot be empty (TODO!)
 			set -U _gi_list (cat $tmp_gilist_fname)
 			echo $_gi_list | tr ' ' '\n'
 		else # trigger the memory and fs loading
-			echo (gi list) | tr ' ' '\n'
+			gi list >/dev/null			
 		end			
 	else 
 		echo $_gi_list | tr ' ' '\n'		
