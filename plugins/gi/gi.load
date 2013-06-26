@@ -1,54 +1,61 @@
 # gitignore.io cli for fish
 #
+
 set -g tmp_gilist_fname /tmp/.gi_list_updated # it can be always the same
 
 function gi
   if test (count $argv) = 1 -a $argv[1] = 'list'
-    set res (curl http://gitignore.io/api/list | tr ',' '\n' | sort ^/dev/null)
-    if test (count $res) > 1
+    if set -l res (curl http://gitignore.io/api/list | tr ',' '\n' | sort ^/dev/null)
       emit gi_list_updated $res
+      echo $res # return the valid parameters to the user
     end
-    echo $res
+
   else
-    set args 
+
+    # the use of `list` parameter make sense only when
+    # - the user want to know the gitignore.io api
+    # - when the plugin update it's autocomplete
+    #
+    # here the check of the use of `list` parameter with others
+    # is only useful to teach the user on the usage of `gi`
     if contains 'list' $argv
-      echo (set_color -o red)"Sorry, but `list` parameter doesn't make sense with others"(set_color normal) ^-
-      for a in $argv
-        if test $a = 'list'; continue; end
-        set args $args $a
-      end
-      echo (set_color -o red)"the command will run as "(set_color -o green)" `gi $args`:"(set_color normal) ^-
-    else
-      set args $argv
+      echo -n (set_color -o red)
+      echo "Sorry, but `list` parameter doesn't make sense with others"
+      echo -n (set_color -o red)
+      echo -n "the command will run as "
+      echo (set_color -o blue)" `gi "(echo $argv|sed -e s/' *list '//)"`:"(set_color normal) ^-
     end
-    set -l params (echo $args|tr ' ' ',')
-    curl http://gitignore.io/api/$params
+
+    curl http://gitignore.io/api/(echo $argv|sed -e s/' *list '// -e s/' '/','/g)
   end
 end
 
 function _upd_mem --on-event gi_list_updated
-  set -U _gi_list $argv
+  if not test (count $argv) = 0 # if gitignore.io can be reached
+    set -x _gi_list $argv
+  end
 end
 
 function _upd_tmp_gilis --on-event gi_list_updated
-  echo $argv | tr ' ' '\n' > $tmp_gilist_fname    
+  if not test (count $argv) = 0 # if gitignore.io can be reached
+    echo -n $argv | sed -e s/' '/'\n'/g > $tmp_gilist_fname
+  end
 end
 
 # used to make the shell initialization more responsive.
 # see "The law of responsiveness" in `help design`
 # the latency ranking is: network, fs, memory
-# so the gi_list is searched first in memory, than fs and network
-function _get_gilist  
-  if not set -q -U _gi_list # search in memory      
-    if test -e $tmp_gilist_fname # then fs ... but the file cannot be empty (TODO!)
-      set -U _gi_list (cat $tmp_gilist_fname)
-      echo $_gi_list | tr ' ' '\n'
+# so the `gi list` is searched first in memory, than fs and network
+function _get_gilist
+  if not set -q -x _gi_list # search in memory
+    if test -s $tmp_gilist_fname # then fs with a not empty file
+      set -x _gi_list (cat $tmp_gilist_fname) # update the memory
     else # trigger the memory and fs loading
-      gi list >/dev/null      
-    end      
-  else 
-    echo $_gi_list | tr ' ' '\n'    
-  end    
+      gi list >/dev/null
+    end
+  end
+
+  echo $_gi_list | tr ' ' '\n' # get what is currently in memory
 end
 
-complete -c gi -a '(_get_gilist)' -x --description 'from gitignore.io' 
+complete -c gi -a '(_get_gilist)' -x --description 'from gitignore.io'
