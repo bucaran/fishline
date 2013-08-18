@@ -2,6 +2,8 @@
 
 The name says it all
 
+![cor theme](https://f.cloud.github.com/assets/516068/692075/a30d9080-dbf6-11e2-8dd3-d07cce41259d.png)
+
 For this theme you need a emoji supporting terminal and the emoji-clock plugin
 
 * emoji-clock
