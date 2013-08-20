@@ -42,7 +42,7 @@ just add a new file (ending in .load) into the `custom/` directory.
 
 ## Send us your theme!
 
-I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the `themes/` directory.
+I'm hoping to collect a bunch of themes for our command prompts. You can see existing ones in the [themes](themes/) directory.
 
 
 ## Switching to fish
@@ -73,6 +73,10 @@ Substitute /bin/bash with /bin/tcsh or /bin/zsh as appropriate.
 ```
 
 3. Start / restart fish (just open a new terminal)
+
+### Uninstall
+
+    rm -rf ~/.oh-my-fish
 
 
 ###. Oh My ZSH
