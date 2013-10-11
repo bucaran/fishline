@@ -1,20 +1,61 @@
 # gitignore.io cli for fish
 #
 
+set -g tmp_gilist_fname /tmp/.gi_list_updated # it can be always the same
+
 function gi
-  #curl http://gitignore.io/api/$argv
-  set -l params (echo $argv|tr ' ' ',') 
-	curl http://gitignore.io/api/$params 
+  if test (count $argv) = 1 -a $argv[1] = 'list'
+    if set -l res (curl http://gitignore.io/api/list | tr ',' '\n' | sort ^/dev/null)
+      emit gi_list_updated $res
+      echo $res # return the valid parameters to the user
+    end
+
+  else
+
+    # the use of `list` parameter make sense only when
+    # - the user want to know the gitignore.io api
+    # - when the plugin update it's autocomplete
+    #
+    # here the check of the use of `list` parameter with others
+    # is only useful to teach the user on the usage of `gi`
+    if contains 'list' $argv
+      echo -n (set_color -o red)
+      echo "Sorry, but `list` parameter doesn't make sense with others"
+      echo -n (set_color -o red)
+      echo -n "the command will run as "
+      echo (set_color -o blue)" `gi "(echo $argv|sed -e s/' *list '//)"`:"(set_color normal) ^-
+    end
+
+    curl http://gitignore.io/api/(echo $argv|sed -e s/' *list '// -e s/' '/','/g)
+  end
 end
 
-# enable the complation by invoking `gi list`
-if not set -q -g gi_list
-	timeout 2 ping -c 1 -q gitignore.io >/dev/null
-	set gi_available $status
-	
-	if test $gi_available
-		set -g gi_list (gi list| tr ',' ' ' ^/dev/null)  
-	end
+function _upd_mem --on-event gi_list_updated
+  if not test (count $argv) = 0 # if gitignore.io can be reached
+    set -x _gi_list $argv
+  end
 end
 
-complete -c gi -a "$gi_list" 
+function _upd_tmp_gilis --on-event gi_list_updated
+  if not test (count $argv) = 0 # if gitignore.io can be reached
+    echo -n $argv | sed -e s/' '/'\n'/g > $tmp_gilist_fname
+  end
+end
+
+# used to make the shell initialization more responsive.
+# see "The law of responsiveness" in `help design`
+# the latency ranking is: network, fs, memory
+# so the `gi list` is searched first in memory, than fs and network
+function _get_gilist
+  if not set -q -x _gi_list # search in memory
+    if test -s $tmp_gilist_fname # then fs with a not empty file
+      set -x _gi_list (cat $tmp_gilist_fname) # update the memory
+    else # trigger the memory and fs loading
+      gi list >/dev/null
+    end
+  end
+
+  echo $_gi_list | tr ' ' '\n' # get what is currently in memory
+end
+
+complete -c gi -a '(_get_gilist)' -x --description 'from gitignore.io'
