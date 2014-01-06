@@ -1,0 +1,18 @@
+function simple_alias --argument-names alias command
+  echo "
+  function __alias_completion_$alias                 
+    set -l cmd (commandline -o)
+    set -e cmd[1]
+    complete -C\"$command \$cmd\"
+  end
+  " | .
+  complete -c $alias -a "(__alias_completion_$alias)"
+  alias $alias $command
+end
+
+simple_alias g 'git status'
+simple_alias gco 'git checkout'
+simple_alias gf 'git fetch'
+simple_alias gb 'git branch'
+simple_alias gd 'git diff'
+simple_alias gcp 'git cherry-pick'
