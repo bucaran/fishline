@@ -40,6 +40,14 @@ function __syl20bnr_unpushed_commit_count -d "Return the number of unpushed comm
   git status -s -b ^/dev/null | grep -E -o "ahead\ [0-9]+" | awk '{print $2}'
 end
 
+function __syl20bnr_cut_cmd -d "Return the command to use for cut"
+  if which -s gcut
+    command gcut $argv
+  else
+    command cut $argv
+  end
+end
+
 # ----------------------------------------------------------------------------
 # Aliases
 # ----------------------------------------------------------------------------
@@ -49,6 +57,8 @@ alias trp toggle_right_prompt
 # ----------------------------------------------------------------------------
 # Prompts
 # ----------------------------------------------------------------------------
+
+
 
 function fish_prompt -d "Write out the left prompt of the syl20bnr theme"
   set -l last_status $status
@@ -96,8 +106,8 @@ function fish_prompt -d "Write out the left prompt of the syl20bnr theme"
     end
     set ps_git $colbwhite"git:"$colbcyan$git_branch_name$git_info$colnormal"@"$colbred$git_repo_name
     if test "$basedir_name" != "$git_repo_name"
-        set -l basedir_depth (echo (__syl20bnr_git_repo_base) | cut -d "/" --output-delimiter=" " -f 1- | wc -w)
-        set -l depth (echo (pwd) | cut -d "/" --output-delimiter=" " -f 1- | wc -w)
+        set -l basedir_depth (echo (__syl20bnr_git_repo_base) | __syl20bnr_cut_cmd -d "/" --output-delimiter=" " -f 1- | wc -w)
+        set -l depth (echo (pwd) | __syl20bnr_cut_cmd -d "/" --output-delimiter=" " -f 1- | wc -w)
         set depth (math $depth - $basedir_depth)
         set ps_git $ps_git$colbwhite":"$colbgreen$basedir_name$colnormal"("$depth")"
     end
@@ -112,7 +122,7 @@ function fish_prompt -d "Write out the left prompt of the syl20bnr theme"
   # '/' without the current directory and depth.
   set -l ps_pwd ""
   if test -z "$ps_git"
-    set -l depth (echo (pwd) | cut -d "/" --output-delimiter=" " -f 1- | wc -w)
+    set -l depth (echo (pwd) | __syl20bnr_cut_cmd -d "/" --output-delimiter=" " -f 1- | wc -w)
     set -l in_home (echo (pwd) | grep ~)
     if test -n "$in_home"
       set ps_pwd $colbwhite"home"
@@ -172,7 +182,7 @@ function fish_right_prompt -d "Write out the right prompt of the syl20bnr theme"
   # The where segment format is X@Y where:
   #   X is the username
   #   Y is the hostname
-  set -l ps_where $colnormal(whoami)@(hostname|cut -d . -f 1)
+  set -l ps_where $colnormal(whoami)@(hostname|__syl20bnr_cut_cmd -d . -f 1)
   
   # Right Prompt
 
@@ -180,4 +190,3 @@ function fish_right_prompt -d "Write out the right prompt of the syl20bnr theme"
     echo -n -s $ps_where
   end
 end
-
