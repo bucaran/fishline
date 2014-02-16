@@ -1,0 +1,35 @@
+# Opens an xcode project workspace or if one isn't found, a project.
+
+function -d "open xcworkspaces or xcprojects" openx
+	if test (find . -maxdepth 1 -name '*.xcworkspace' -print -quit)
+	  echo "Opening workspace"
+	  open *.xcworkspace
+	else
+	  if test (find . -maxdepth 1 -name '*.xcodeproj' -print -quit)
+		echo "Opening project"
+		open *.xcodeproj
+	  else
+		echo "Nothing found"
+	  end
+	end
+end
+
+function -d "open xcworkspaces or xcprojects in appcode" opena
+	if test -f /usr/local/bin/appcode
+	else 
+		echo "Install the appcode command, the menu item is 'Install command line launcher'."
+		return 1
+	end
+
+	if test (find . -maxdepth 1 -name '*.xcworkspace' -print -quit)
+	  echo "Opening workspace"
+	  appcode *.xcworkspace
+	else
+	  if test (find . -maxdepth 1 -name '*.xcodeproj' -print -quit)
+		echo "Opening project"
+		appcode *.xcodeproj
+	  else
+		echo "Nothing found"
+	  end
+	end
+end
