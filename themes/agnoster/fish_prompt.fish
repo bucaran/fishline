@@ -101,6 +101,24 @@ function prompt_dir -d "Display the actual directory"
   prompt_segment blue black (prompt_pwd)
 end
 
+function prompt_hg -d "Display mercurial state"
+  set -l branch
+  set -l state
+  if command hg id >/dev/null 2>&1
+    if command hg prompt >/dev/null 2>&1
+      set branch (command hg prompt "{branch}")
+      set state (command hg prompt "{status}")
+      set branch_symbol \uE0A0
+      if [ "$state" = "!" ]
+        prompt_segment red white "$branch_symbol $branch ±"
+      else if [ "$state" = "?" ]
+          prompt_segment yellow black "$branch_symbol $branch ±"
+        else
+          prompt_segment green black "$branch_symbol $branch"
+      end
+    end
+  end
+end
 
 
 function prompt_git -d "Display the actual git state"
@@ -150,6 +168,7 @@ function fish_prompt
   prompt_status
   prompt_user
   prompt_dir
+  prompt_hg
   prompt_git
   prompt_finish
 end
