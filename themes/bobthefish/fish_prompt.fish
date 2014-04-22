@@ -148,7 +148,7 @@ end
 # Theme components
 # ===========================
 
-function __bobthefish_prompt_status -d 'the symbols for a non zero exit status, root and background jobs'
+function __bobthefish_prompt_status -d 'the symbols for a non zero exit status, root, virtualenv, and background jobs'
   set -l nonzero
   set -l superuser
   set -l bg_jobs
@@ -167,6 +167,12 @@ function __bobthefish_prompt_status -d 'the symbols for a non zero exit status, 
   # Jobs display
   if [ (jobs -l | wc -l) -gt 0 ]
     set bg_jobs $bg_job_glyph
+  end
+
+  set -gx VIRTUAL_ENV_DISABLE_PROMPT true
+  if test "$VIRTUAL_ENV"
+    __bobthefish_start_segment blue fff
+    echo -n (basename $VIRTUAL_ENV)
   end
 
   set -l status_flags "$nonzero$superuser$bg_jobs"
