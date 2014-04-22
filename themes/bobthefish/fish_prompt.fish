@@ -172,7 +172,7 @@ function __bobthefish_prompt_status -d 'the symbols for a non zero exit status, 
   set -gx VIRTUAL_ENV_DISABLE_PROMPT true
   if test "$VIRTUAL_ENV"
     __bobthefish_start_segment blue fff
-    echo -n (basename $VIRTUAL_ENV)
+    echo -n (basename $VIRTUAL_ENV)" "
   end
 
   set -l status_flags "$nonzero$superuser$bg_jobs"
