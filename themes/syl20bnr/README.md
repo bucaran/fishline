@@ -13,6 +13,7 @@ Sylvain Benner personal, compact (hmmm...) yet complete (almost :-)) oh-my-fish 
 	- [end](#end)
 	- [where](#where)
 - [Functions](#functions)
+- [OS X compatibility](#os-x-compatibility)
 - [Cygwin compatibility](#cygwin-compatibility)
 
 ## Segments
@@ -99,6 +100,11 @@ This segment is displayed in the right prompt.
 
 Some functions come with the theme:
 - `toggle_right_prompt` will... toggle the right prompt! (alias: `trp`)
+
+## OS X compatibility
+
+OS X has a version of cut that doesn't support the `--output-delimiter` option. To get around this,
+install GNU `coreutils` using Homebrew or macports.
 
 ## Cygwin compatibility
 
