@@ -83,16 +83,20 @@ if test -e ~/.config/fish/config.fish
   colored yellow "Found ~/.config/fish/config.fish."
 
   if not set -q action
-    read -l -p 'echo "Modify (append needed lines), replace (with backup)? [M/r]: "' action
+    read -p 'echo -n "Modify (append needed lines), replace (with backup)? [M/r]: "' action
   end
-
+  
   set modify_options 'm' 'M'
-  if contains $modify_options $action
+  set remove_options 'r' 'R'
+  if contains $action $modify_options
     colored green " Using the Oh My Fish template file and adding it to the end of ~/.config/fish/config.fish"
 
     echo -e "\n### Oh My Fish configuration\n" >> ~/.config/fish/config.fish
     cat $install_dir/templates/config.fish | sed 's!<oh-my-fish-installation-directory>!'"$install_dir"'!' >> ~/.config/fish/config.fish
   else
+    if not contains $action $remove_options 
+      colored red "Couldn't understand input, going with [r]emove option. (note: your old config is still safe)."
+    end
     colored green " Backing up to ~/.config/fish/config.orig"
     mv ~/.config/fish/config.{fish,orig}
 
