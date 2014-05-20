@@ -48,10 +48,6 @@ if math "$i <" (count $args) > /dev/null
     set pargs $args[(math "$i + 1")..-1]
 end
 
-echo "action: $action"
-echo "positional arguments:" $pargs
-echo "parg[1]: $pargs[1]"
-
 # tests for presence of install_dir positional argument. 
 # if none is found set install_dir to standard install location
 if set -q pargs[1]
@@ -66,8 +62,8 @@ end
 # Test if the installation directory is empty. Replaces test for ~/.oh-my-fish/
 if test -d $install_dir
     if test (find $install_dir -maxdepth 0 -type d -empty | wc -l) -ne 1
-        colored yellow -n You already have Oh My Fish installed or are trying to install to a non-empty folder.
-        echo " You'll need to remove the contents of $install_dir if you want to install Oh My Fish there."
+        colored yellow You already have Oh My Fish installed or are trying to install to a non-empty folder.
+        echo "You'll need to remove the contents of $install_dir if you want to install Oh My Fish there."
         exit 1
     end
 end
@@ -75,7 +71,7 @@ end
 colored blue Cloning Oh My Fish...
 type git >/dev/null
 # Note: Substituted this to test with templated config.fish
-and git clone https://github.com/gabeos/oh-my-fish.git
+and git clone https://github.com/gabeos/oh-my-fish.git $install_dir
 #and git clone https://github.com/bpinto/oh-my-fish.git $install_dir
 or begin
     echo "git not installed or couldn't create directory at $install_dir"
