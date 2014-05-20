@@ -1,4 +1,10 @@
+#!/bin/fish
+
+
+
+
 #!/usr/bin/env fish
+
 
 # Takes color as first argument, and text to print as other arguments.
 function colored
@@ -8,18 +14,35 @@ function colored
     set_color normal
 end
 
-if test -d ~/.oh-my-fish
+
+set -q $argv[1]
+if test $status -eq 1 
+    if test -d $argv[1]
+        set -g install_dir $argv[1]	
+    else 
+        mkdir $argv[1]
+        if test $status -eq 0
+            colored yellow "Made installation directory at $argv[1]"
+            set -g install_dir $argv[1]
+        else
+            colored red "Couldn't find or create installation directory at $argv[1]. Exiting."
+            exit 1
+        end
+    end
+end
+
+if test -f "$install_dir/oh-my-fish.fish" 
     colored yellow -n You already have Oh My Fish installed.
     echo " You'll need to remove ~/.oh-my-fish if you want to install"
-    exit
+    exit 1
 end
 
 colored blue Cloning Oh My Fish...
 type git >/dev/null
-and git clone https://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
+and git clone https://github.com/bpinto/oh-my-fish.git $install_dir
 or begin
     echo git not installed
-    exit
+    exit 1
 end
 
 colored blue Looking for an existing fish config...
@@ -30,7 +53,7 @@ if test -f ~/.config/fish/config.fish
 end
 
 colored blue "Using the Oh My Fish template file and adding it to ~/.config/fish/config.fish"
-cp ~/.oh-my-fish/templates/config.fish ~/.config/fish/config.fish
+cat $install_dir/templates/config.fish | sed 's!<oh-my-fish-installation-directory>!'"$install_dir"'!' >> ~/.config/fish/config.fish
 
 colored green \
 '          _
