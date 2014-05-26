@@ -1,0 +1,50 @@
+# name:     lolprpmpt
+# requires: git, hostname, tr, wc, whoami
+# thanks:   mostly copied from robbyrussell and bobthefish themes
+#			also inspired by lolcat,
+
+function fish_prompt
+
+	# store the previous command return status for later
+	set -l cmdsts $status
+
+	# color setting
+	set -l normal (set_color -o normal)
+	set -l purple (set_color -o 60f)
+	set -l blue   (set_color -o blue)
+	set -l green  (set_color -o green)
+	set -l yellow (set_color -o yellow)
+	set -l orange (set_color -o f60)
+	set -l red    (set_color -o red)
+
+	# user hostname and path in standard ssh format
+	set -l me    $purple ero          $normal     '@'
+	set -l nfqdn $blue   macbook      $normal     ':'
+	set -l cwd   $green  (prompt_pwd) $normal     ' '
+
+	# user hostname and path in standard ssh format
+	#set -l me    $purple (whoami)                $normal ':'
+	#set -l nfqdn $blue   (hostname -s)           $normal
+	#set -l cwd   $normal '(' $green (prompt_pwd) $normal ') '
+
+	# git info
+	if set -l branch (git rev-parse --abbrev-ref HEAD ^/dev/null)
+		set -l files (git status -s --ignore-submodules ^/dev/null | wc -l | tr -d ' ')
+		test $files -ne 0; and set -l dirty $normal ':' $red $files
+		set git $yellow 'git' $normal '(' $orange $branch $dirty $normal ') '
+	end
+
+	# show the return value of the last terminal command
+	# only if there was an error
+	test $cmdsts -ne 0; and set -l error $normal 'exit(' $red $cmdsts $normal ') '
+
+	# hashtag the prompt for root
+	switch $USER
+		case 'root'
+			set prompt $normal '# '
+		case '*'
+			set prompt $normal '% '
+	end
+
+	echo -n -s $me $nfqdn $cwd $git $error $prompt
+end
