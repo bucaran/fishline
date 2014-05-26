@@ -1,7 +1,7 @@
 # name:     lolprpmpt
 # requires: git, hostname, tr, wc, whoami
-# thanks:   mostly copied from robbyrussell and bobthefish themes
-#			also inspired by lolcat,
+# thanks:   mostly copied from the robbyrussell theme
+#           inspired by lolcat python script and bobthefish theme
 
 function fish_prompt
 
@@ -18,23 +18,18 @@ function fish_prompt
 	set -l red    (set_color -o red)
 
 	# user hostname and path in standard ssh format
-	set -l me    $purple ero          $normal     '@'
-	set -l nfqdn $blue   macbook      $normal     ':'
-	set -l cwd   $green  (prompt_pwd) $normal     ' '
+	set -l me    $purple (whoami)      $normal '@'
+	set -l nfqdn $blue   (hostname -s) $normal ':'
+	set -l cwd   $green  (prompt_pwd)  $normal ' '
 
-	# user hostname and path in standard ssh format
-	#set -l me    $purple (whoami)                $normal ':'
-	#set -l nfqdn $blue   (hostname -s)           $normal
-	#set -l cwd   $normal '(' $green (prompt_pwd) $normal ') '
-
-	# git info
+	# the git bits
 	if set -l branch (git rev-parse --abbrev-ref HEAD ^/dev/null)
 		set -l files (git status -s --ignore-submodules ^/dev/null | wc -l | tr -d ' ')
 		test $files -ne 0; and set -l dirty $normal ':' $red $files
 		set git $yellow 'git' $normal '(' $orange $branch $dirty $normal ') '
 	end
 
-	# show the return value of the last terminal command
+	# display the return value of the last command
 	# only if there was an error
 	test $cmdsts -ne 0; and set -l error $normal 'exit(' $red $cmdsts $normal ') '
 
@@ -46,5 +41,6 @@ function fish_prompt
 			set prompt $normal '% '
 	end
 
+	# finally print the prompt
 	echo -n -s $me $nfqdn $cwd $git $error $prompt
 end
