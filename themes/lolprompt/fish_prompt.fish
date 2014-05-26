@@ -1,7 +1,7 @@
-# name:     lolprpmpt
-# requires: git, hostname, tr, wc, whoami
-# thanks:   mostly copied from the robbyrussell theme
-#           inspired by lolcat python script and bobthefish theme
+# name:		lolprpmpt
+# requires:	git, hostname, tr, wc, whoami
+# thanks:	mostly copied from the robbyrussell theme
+# 		inspired by lolcat python script and bobthefish theme
 
 function fish_prompt
 
@@ -9,19 +9,19 @@ function fish_prompt
 	set -l cmdsts $status
 
 	# color settings
-	set -l normal (set_color -o normal)
-	set -l purple (set_color -o 60f)
-	set -l blue   (set_color -o blue)
-	set -l green  (set_color -o green)
-	set -l yellow (set_color -o yellow)
-	set -l orange (set_color -o f60)
-	set -l red    (set_color -o red)
+	set -l normal	(set_color -o normal)
+	set -l purple	(set_color -o 60f)
+	set -l blue	(set_color -o blue)
+	set -l green	(set_color -o green)
+	set -l yellow	(set_color -o yellow)
+	set -l orange	(set_color -o f60)
+	set -l red	(set_color -o red)
 
 	# set the user, short hostname (non-fully qualified domain name)
 	# and current path in the standard ssh style format
-	set -l me    $purple (whoami)      $normal '@'
-	set -l nfqdn $blue   (hostname -s) $normal ':'
-	set -l cwd   $green  (prompt_pwd)  $normal ' '
+	set -l me	$purple	(whoami)	$normal	'@'
+	set -l nfqdn	$blue	(hostname -s)	$normal	':'
+	set -l cwd	$green	(prompt_pwd)	$normal	' '
 
 	# the git bits
 	if set -l branch (git rev-parse --abbrev-ref HEAD ^/dev/null)
