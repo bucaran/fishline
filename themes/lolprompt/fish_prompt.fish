@@ -8,7 +8,7 @@ function fish_prompt
 	# store the previous command return status for later
 	set -l cmdsts $status
 
-	# color setting
+	# color settings
 	set -l normal (set_color -o normal)
 	set -l purple (set_color -o 60f)
 	set -l blue   (set_color -o blue)
@@ -17,7 +17,8 @@ function fish_prompt
 	set -l orange (set_color -o f60)
 	set -l red    (set_color -o red)
 
-	# user hostname and path in standard ssh format
+	# set the user, short hostname (non-fully qualified domain name)
+	# and current path in the standard ssh style format
 	set -l me    $purple (whoami)      $normal '@'
 	set -l nfqdn $blue   (hostname -s) $normal ':'
 	set -l cwd   $green  (prompt_pwd)  $normal ' '
@@ -30,7 +31,7 @@ function fish_prompt
 	end
 
 	# display the return value of the last command
-	# only if there was an error
+	# only if the command produced an error
 	test $cmdsts -ne 0; and set -l error $normal 'exit(' $red $cmdsts $normal ') '
 
 	# hashtag the prompt for root
