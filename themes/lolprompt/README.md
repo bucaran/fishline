@@ -27,5 +27,5 @@ You will not need any special patched fonts for this to work.
      * You currently are root [#]
 
 [screenshot]: http://i.imgur.com/4szYYdt.png
-[lolcat]:     https://pypi.python.org/pypi/lolcat/0.42.42
+[lolcat]:     https://github.com/tehmaze/lolcat
 [bobthefish]: https://github.com/bpinto/oh-my-fish/tree/master/themes/bobthefish  
