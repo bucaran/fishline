@@ -1,4 +1,4 @@
-## lol
+## lolfish
 
 lolfish is a Git-aware fish theme inspired by [lolcat][lolcat] and [bobthefish][bobthefish].
 
