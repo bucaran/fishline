@@ -1,8 +1,8 @@
-## lolprompt
+## lol
 
-lolprompt is a Git-aware fish theme inspired by [lolcat][lolcat] and [bobthefish][bobthefish].
+lolfish is a Git-aware fish theme inspired by [lolcat][lolcat] and [bobthefish][bobthefish].
 
-![lolprompt][screenshot]
+![lolfish][screenshot]
 
 You will not need any special patched fonts for this to work.
 

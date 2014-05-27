@@ -1,4 +1,4 @@
-# name:		lolprpmpt
+# name:		lolfish
 # requires:	git, hostname, sed, tr, wc
 # thanks:	mostly copied from the robbyrussell theme
 # 		inspired by lolcat python script and bobthefish theme
