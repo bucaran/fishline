@@ -9,13 +9,13 @@ function fish_prompt
 	set -l cmdsts $status
 
 	# color settings
-	set -l normal	(set_color -o normal)
-	set -l purple	(set_color -o 60f)
-	set -l blue	(set_color -o blue)
-	set -l green	(set_color -o green)
-	set -l yellow	(set_color -o yellow)
-	set -l orange	(set_color -o f60)
-	set -l red	(set_color -o red)
+	set -l normal	(set_color normal)
+	set -l purple	(set_color af00d7)
+	set -l blue	(set_color blue)
+	set -l green	(set_color green)
+	set -l yellow	(set_color yellow)
+	set -l orange	(set_color d75f5f)
+	set -l red	(set_color red)
 
 	# set the user, short hostname (non-fully qualified domain name)
 	# and current path in the standard ssh style format
