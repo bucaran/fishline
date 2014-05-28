@@ -19,12 +19,13 @@ You will not need any special patched fonts for this to work.
 ### The Prompt
 
  * ssh style user@hostname:path format
- * Current project's Git branch: [master]
- * Number of dirty files in the Git project: [master:3]
- * Exit status of previous command: ![n]
  * Flags:
-     * You currently are a normal user '%'
-     * You currently are root '#'
+     * Current project's Git branch: [master]
+     * Number of dirty files in the Git project: [master:3]
+     * Background jobs: &[n]
+     * Exit status of previous command: ![n]
+     * You currently are a normal user: %
+     * You currently are root: #
 
 [screenshot]: http://i.imgur.com/4szYYdt.png
 [lolcat]:     https://github.com/tehmaze/lolcat

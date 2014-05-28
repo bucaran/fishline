@@ -8,6 +8,9 @@ function fish_prompt
 	# store the previous command return status for later
 	set -l prev_status $status
 
+	# get the number of background jobs
+        set -l jobs (count (jobs -p ^/dev/null))
+
 	# color settings
 	set -l normal	(set_color normal)
 	set -l purple	(set_color af00d7)
@@ -31,9 +34,11 @@ function fish_prompt
 		set git $yellow 'git' $normal '[' $orange $branch $dirty $normal '] '
 	end
 
-	# display the return value of the last command
-	# only if the command produced an error
+	# on dirty exit, display the return value of the last command ![n]
 	test $prev_status -ne 0; and set -l error $normal '![' $red $prev_status $normal '] '
+
+	# display the background jobs &[n]
+	test $jobs -ne 0; and set -l bjobs $normal '&[' $orange $jobs $normal '] '
 
 	# hashtag the prompt for root
 	switch $USER
@@ -44,5 +49,5 @@ function fish_prompt
 	end
 
 	# finally print the prompt
-	echo -n -s $uname $hname $cwd $git $error $prompt
+	echo -n -s $uname $hname $cwd $git $bjobs $error $prompt
 end
