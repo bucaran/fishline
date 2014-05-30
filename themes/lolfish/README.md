@@ -9,11 +9,9 @@ You will not need any special patched fonts for this to work.
 
 ### Features
 
- * bobthefish's helpful, but not too distracting, greeting.
- * bobthefish's subtle timestamp hanging out off to the right.
- * Wow such color
  * Some of the things you need to know about Git in a glance.
  * A return value from the last command if there was an error.
+ * Wow such color
 
 
 ### The Prompt
@@ -23,10 +21,10 @@ You will not need any special patched fonts for this to work.
      * Current project's Git branch: [master]
      * Number of dirty files in the Git project: [master:3]
      * Background jobs: &[n]
-     * Exit status of previous command: ![n]
+     * Exit status of previous command: !![n]
      * You currently are a normal user: %
      * You currently are root: #
 
-[screenshot]: http://i.imgur.com/4szYYdt.png
+[screenshot]: http://i.imgur.com/RDHBq66.png
 [lolcat]:     https://github.com/tehmaze/lolcat
 [bobthefish]: https://github.com/bpinto/oh-my-fish/tree/master/themes/bobthefish  
