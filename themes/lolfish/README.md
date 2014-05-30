@@ -25,6 +25,6 @@ You will not need any special patched fonts for this to work.
      * You currently are a normal user: %
      * You currently are root: #
 
-[screenshot]: http://i.imgur.com/RDHBq66.png
+[screenshot]: http://i.imgur.com/EEdvXp2.png
 [lolcat]:     https://github.com/tehmaze/lolcat
 [bobthefish]: https://github.com/bpinto/oh-my-fish/tree/master/themes/bobthefish  
