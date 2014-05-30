@@ -2,31 +2,32 @@
 # requires:	jobs, git, hostname, sed
 # inspirationk:	lolcat
 
+#
 # set the seed color to start the prompt
 # 1 starts at red
 # 6 starts at yellow
 # 16 starts at green
 # 21 starts at blue
 # 26 starts at magenta
-
+#
 set start_color 21
 
 function lolfish -d "very rainbow. wow"
 
 	#
 	# valid xterm-256color r g b color space hex values
-	# r g b can be any of 00, 57, 87, af, d7, ff
+	# r, g, b can be any of 00, 57, 87, af, d7, ff
 	# red    ff0000
 	# yellow ffff00
 	# green  00ff00
 	# blue   0000ff
 	#
-	set -l colors ff0000 ff5700 ff8700 ffaf00 ffd700 \
-		ffff00 d7ff00 afff00 87ff00 57ff00 \
-		00ff00 00ff57 00ff87 00ffaf 00ffd7 \
-		00ffff 00d7ff 00afff 0087ff 0057ff \
-		0000ff 5700ff 8700ff af00ff d700ff \
-		ff00ff ff00d7 ff00af ff0087 ff0057
+	set -l colors 	ff0000 ff5700 ff8700 ffaf00 ffd700 \
+			ffff00 d7ff00 afff00 87ff00 57ff00 \
+	j		00ff00 00ff57 00ff87 00ffaf 00ffd7 \
+			00ffff 00d7ff 00afff 0087ff 0057ff \
+			0000ff 5700ff 8700ff af00ff d700ff \
+			ff00ff ff00d7 ff00af ff0087 ff0057
 
 	#
 	# set the color differential between prompt items
