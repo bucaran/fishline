@@ -69,7 +69,7 @@ function lolfish -d "very rainbow. wow"
 		# print these symbols in normal color
 		#
 		switch $arg
-			case '[' ']' ':' '@' '%' ' ' '#'
+			case '[' ']' ':' '@' ' '
 				set_color normal
 				echo -n -s $arg
 				continue
@@ -115,7 +115,7 @@ function fish_prompt
 	if set -l branch (git rev-parse --abbrev-ref HEAD ^/dev/null)
 		set -l git_dirt (count (git status -s --ignore-submodules ^/dev/null))
 		test $git_dirt -ne 0; and set -l dirty ':' $git_dirt
-		set git 'git' '[' $branch $dirty ']' ' '
+		set git 'git' '(' $branch $dirty ')' ' '
 	end
 
 	#
