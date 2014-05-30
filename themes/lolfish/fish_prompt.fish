@@ -10,6 +10,7 @@
 # 21 starts at blue
 # 26 starts at magenta
 #
+
 set start_color 21
 
 function lolfish -d "very rainbow. wow"
@@ -70,7 +71,7 @@ function lolfish -d "very rainbow. wow"
 		# print these symbols in normal color
 		#
 		switch $arg
-			case '[' ']' ':' '@' ' '
+			case '(' ')' '[' ']' ':' '@' ' '
 				set_color normal
 				echo -n -s $arg
 				continue
@@ -92,16 +93,6 @@ end
 function fish_prompt
 
 	#
-	# store the previous command return status for later
-	#
-	set -l exit_status $status
-
-	#
-	# get the number of background jobs
-	#
-        set -l jobs (count (jobs -p ^/dev/null))
-
-	#
 	# set the user, short hostname (non-fully qualified domain name)
 	# and current path (abbreviated home directory ~ ) in the standard
 	# ssh style format user@hostname:path
@@ -120,16 +111,6 @@ function fish_prompt
 	end
 
 	#
-	# when a command errors, display the return value of the last command !![exit_status]
-	#
-	test $exit_status -ne 0; and set -l error '!' '!' '[' $exit_status ']' ' '
-
-	#
-	# display the number of background jobs &[jobs]
-	#
-	test $jobs -ne 0; and set -l bjobs '&' '[' $jobs ']' ' '
-
-	#
 	# hashtag the prompt for root
 	#
 	switch $USER
@@ -142,5 +123,5 @@ function fish_prompt
 	#
 	# finally print the prompt
 	#
-	lolfish $uname $hname $cwd $git $bjobs $error $prompt
+	lolfish $uname $hname $cwd $git $prompt
 end
