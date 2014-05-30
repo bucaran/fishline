@@ -12,9 +12,9 @@ function fish_right_prompt
 
 	#
         # when a command errors, display the return value
-	# of the last command !![exit_status]
+	# of the last command ![exit_status]
         #
-        test $exit_status -ne 0; and set -l error '!' '!' '[' $exit_status ']'
+        test $exit_status -ne 0; and set -l error '!' '[' $exit_status ']'
 
         #
         # display the number of background jobs &[jobs]
