@@ -24,7 +24,7 @@ function lolfish -d "very rainbow. wow"
 	#
 	set -l colors 	ff0000 ff5700 ff8700 ffaf00 ffd700 \
 			ffff00 d7ff00 afff00 87ff00 57ff00 \
-	j		00ff00 00ff57 00ff87 00ffaf 00ffd7 \
+			00ff00 00ff57 00ff87 00ffaf 00ffd7 \
 			00ffff 00d7ff 00afff 0087ff 0057ff \
 			0000ff 5700ff 8700ff af00ff d700ff \
 			ff00ff ff00d7 ff00af ff0087 ff0057
