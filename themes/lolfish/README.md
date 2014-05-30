@@ -21,8 +21,8 @@ You will not need any special patched fonts for this to work.
  * Flags:
      * Current project's Git branch: (master)
      * Number of dirty files in the Git project: (master:3)
-     * Background jobs: &[n]
-     * Exit status of previous command: ![n]
+     * Background jobs: &:n
+     * Exit status of previous command: !!:n
      * You currently are a normal user: %
      * You currently are root: #
 
