@@ -3,16 +3,23 @@
 # inspirationk:	lolcat
 
 #
-# set the seed color to start the prompt
-# 1 starts at red
-# 6 starts at yellow
-# 16 starts at green
-# 21 starts at blue
-# 26 starts at magenta
+function fish_greeting
+end
+
 #
+# set the seed color to begin the prompt
+#  1 : red
+#  6 : yellow
+# 11 : green
+# 16 : cyan
+# 21 : blue
+# 26 : magenta
+#
+set seed_color 21
 
-set start_color 21
-
+#
+# Rainbows
+#
 function lolfish -d "very rainbow. wow"
 
 	#
@@ -31,32 +38,32 @@ function lolfish -d "very rainbow. wow"
 			ff00ff ff00d7 ff00af ff0087 ff0057
 
 	#
-	# set the color differential between prompt items
-	# lower values produce a smoother rainbow effect
-	# values between 1 and 5 work the best
-	# 10 has an interesting property
-	# 5 works best for non 256 color terminals
+	# set the color differential between prompt items.
+	# lower values produce a smoother rainbow effect.
+	# values between 1 and 5 work the best.
+	# 10 has an interesting property.
+	# 5 works best for non 256 color terminals.
 	#
-	set -l next_color 1
+	set -l color_diff 1
 
 	#
-	# set the start color or default to blue
+	# set the seed color or default to blue
 	#
-	if test $start_color -gt 0
-		set color $start_color
+	if test $seed_color -gt 0
+		set color $seed_color
 	else
-		set color 21
+		set seed_color 21
 	end
 
 	#
-	# reset when it grows beyond the valid color range
+	# reset seed color when it grows beyond the range of valid colors
 	#
-	if test $start_color -gt (count $colors)
-		set start_color 1
+	if test $seed_color -gt (count $colors)
+		set seed_color 1
 	end
 
 	#
-	# start the printing process
+	# the heart of the matter
 	#
 	for arg in $argv
 
@@ -82,24 +89,79 @@ function lolfish -d "very rainbow. wow"
 		#
 		set_color $colors[$color]
 		echo -n -s $arg
-		set color (math $color+$next_color)
+
+		# color for the next prompt item
+		set color (math $color+$color_diff)
 
 	end
 
-	set start_color (math $start_color+$next_color)
+	# progress the seed_color for the next line
+	set seed_color (math $seed_color+$color_diff)
+
+	# reset
 	set_color normal
 end
 
+#
+# Left prompt
+#
 function fish_prompt
 
 	#
-	# set the user, short hostname (non-fully qualified domain name)
-	# and current path (abbreviated home directory ~ ) in the standard
-	# ssh style format user@hostname:path
+	# short hostname (non-fully qualified domain name)
 	#
-	set -l uname '[' $USER '@'
-	set -l hname (hostname | sed 's/\..*//' ^/dev/null) ':'
-	set -l cwd   (echo $PWD | sed "s,$HOME,~," ^/dev/null) ']' ' '
+	set -l hname (hostname | sed 's/\..*//' ^/dev/null)
+
+	#
+	# present working directory (abbreviated home directory ~ )
+	#
+	set -l pwd (echo $PWD | sed "s,$HOME,~," ^/dev/null)
+
+	#
+	# hashtag the prompt for root
+	#
+	switch $USER
+		case 'root'
+			set prompt '# '
+		case '*'
+			set prompt '% '
+	end
+
+	#
+	# finally print the prompt
+	#
+	# ssh format prompt, [username@hostname:pwd]%
+	#lolfish '[' $USER '@' $hname ':' $pwd ']' $prompt
+
+	# abbreviated prompt, [pwd]%
+	lolfish '[' $pwd ']' $prompt
+end
+
+#
+# Right prompt
+#
+function fish_right_prompt
+
+	#
+	# store the previous command return status for later
+	#
+	set -l exit_status $status
+
+	#
+	# get the number of background jobs
+	#
+	set -l jobs (count (jobs -p ^/dev/null))
+
+	#
+	# when a command errors, display the return value
+	# of the last command, [!:exit_status]
+	#
+	test $exit_status -ne 0; and set -l error '[' '!' ':' $exit_status ']'
+
+	#
+	# display the number of background jobs, [&:jobs]
+	#
+	test $jobs -ne 0; and set -l bjobs '[' '&' ':' $jobs ']'
 
 	#
 	# the git bits
@@ -107,21 +169,17 @@ function fish_prompt
 	if set -l branch (git rev-parse --abbrev-ref HEAD ^/dev/null)
 		set -l git_dirt (count (git status -s --ignore-submodules ^/dev/null))
 		test $git_dirt -ne 0; and set -l dirty ':' $git_dirt
-		set git 'git' '(' $branch $dirty ')' ' '
+		set git '[' $branch $dirty ']'
 	end
 
-	#
-	# hashtag the prompt for root
-	#
-	switch $USER
-		case 'root'
-			set prompt '#' ' '
-		case '*'
-			set prompt '%' ' '
+	# display the number of tmux sessions, [t:tmux_sessions]
+	set -l tmux_sessions (count (tmux list-sessions ^/dev/null))
+	if test $tmux_sessions -gt 0
+		set tmux '[' 't' ':' $tmux_sessions ']'
 	end
 
-	#
-	# finally print the prompt
-	#
-	lolfish $uname $hname $cwd $git $prompt
+	# date in default tmux format, [Hour:Minute Day-Month-Year]
+	set -l date '[' (date +"%H:%M %d-%m-%Y" ^/dev/null) ']'
+
+	lolfish $git $error $bjobs $tmux $date
 end
