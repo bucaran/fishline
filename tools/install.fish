@@ -1,8 +1,3 @@
-#!/bin/fish
-
-
-
-
 #!/usr/bin/env fish
 
 
@@ -20,7 +15,7 @@ end
 function help_exit
     echo "Usage:  [options] [argument]"
     echo "Options:"
-    echo \t '--remove | -r: Move current config.fish to backup (config.orig) and substitute template config file'
+    echo \t '--replace | -r: Move current config.fish to backup (config.orig) and substitute template config file'
     echo \t "--modify | -m: Append template configuration onto end of current config.fish"
     echo "Argument:"
     echo \t "<path/to/install/directory>: By default, Oh My Fish will install in ~/.oh-my-fish."
@@ -28,13 +23,14 @@ function help_exit
     exit 1
 end
 
-set args (getopt -s sh -l modify,remove rm $argv); or help_exit
-set args (fish -c "for el in $args; echo \$el; end")
+set args (getopt -s sh -l modify,replace rm $argv); or help_exit
+# Remove "'" (single-quote) characters
+set args (eval "for el in $args; echo \$el; end")
 
 set i 1
 while true
     switch $args[$i]
-        case "-r" "--remove"
+        case "-r" "--replace"
             set action "r"
         case "-m" "--modify"
             set action "m"
@@ -44,7 +40,7 @@ while true
     set i (math "$i + 1")
 end
 
-if math "$i <" (count $args) > /dev/null
+if test $i -lt (count $args)
     set pargs $args[(math "$i + 1")..-1]
 end
 
@@ -87,14 +83,14 @@ if test -e ~/.config/fish/config.fish
   end
   
   set modify_options 'm' 'M'
-  set remove_options 'r' 'R'
+  set replace_options 'r' 'R'
   if contains $action $modify_options
     colored green " Using the Oh My Fish template file and adding it to the end of ~/.config/fish/config.fish"
 
     echo -e "\n### Oh My Fish configuration\n" >> ~/.config/fish/config.fish
     cat $install_dir/templates/config.fish | sed 's!<oh-my-fish-installation-directory>!'"$install_dir"'!' >> ~/.config/fish/config.fish
   else
-    if not contains $action $remove_options 
+    if not contains $action $replace_options 
       colored red "Couldn't understand input, going with [r]emove option. (note: your old config is still safe)."
     end
     colored green " Backing up to ~/.config/fish/config.orig"
