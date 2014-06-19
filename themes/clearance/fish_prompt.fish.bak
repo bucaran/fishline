@@ -48,10 +48,6 @@ function fish_prompt
     echo -n -s ' · ' $git_info $normal
   end
 
-  set_color yellow
-  printf ' [ %s ]' (date +%H:%M:%S)
-  set_color normal
-
   # Terminate with a nice prompt char
   echo -e ''
   echo -e -n -s '⟩ ' $normal
