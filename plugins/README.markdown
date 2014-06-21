@@ -28,6 +28,7 @@
 * __rbenv__ - Ruby environment/version manager [rbenv](https://github.com/sstephenson/rbenv) 
 * __rvm__ - [rvm](http://rvm.io) ruby version manager
 * __sublime__ - creates 'subl' command line shortcut to launch [Sublime Text editor](http://sublimetext.com/)
+* __systemd__ - [systemd](http://www.freedesktop.org/wiki/Software/systemd/) integration
 * __tmux__  -  Plugin to start tmux with support for 256 colours
 * __vi-mode__ - Basic vi key bindings emulation for fish
 * __xdg__ - Setup [xdg](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) environment on Linux
