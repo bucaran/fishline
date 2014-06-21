@@ -17,6 +17,8 @@ This plugin makes working with pacman easier and faster.  Please refer to pacman
 
 To use this plugin append the following `archlinux/pacman` to `fish_plugins`.
 
+## archlinux/pacman
 
+Same as `archlinux/pacman`, but for [yaourt](https://wiki.archlinux.org/index.php/Yaourt).
 
-
+To use this plugin append the following `archlinux/yaourt` to `fish_plugins`.
