@@ -93,6 +93,7 @@ function __bobthefish_start_segment -d 'Start a prompt segment'
     echo -n ' '
   else
     # If there's already a background...
+    set_color --bold
     if [ "$argv[1]" = "$__bobthefish_current_bg" ]
       # and it's the same color, draw a separator
       echo -n "$__bobthefish_right_arrow_glyph "
@@ -100,8 +101,10 @@ function __bobthefish_start_segment -d 'Start a prompt segment'
       # otherwise, draw the end of the previous segment and the start of the next
       set_color $__bobthefish_current_bg
       echo -n "$__bobthefish_right_black_arrow_glyph "
-      set_color $argv[2]
     end
+    set_color normal
+    set_color -b $argv[1]
+    set_color $argv[2]
   end
   set __bobthefish_current_bg $argv[1]
 end
@@ -136,7 +139,7 @@ end
 function __bobthefish_finish_segments -d 'Close open prompt segments'
   if [ -n $__bobthefish_current_bg -a $__bobthefish_current_bg != 'NONE' ]
     set_color -b normal
-    set_color $__bobthefish_current_bg
+    set_color $__bobthefish_current_bg --bold
     echo -n "$__bobthefish_right_black_arrow_glyph "
     set_color normal
   end
