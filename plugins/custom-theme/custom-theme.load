@@ -7,3 +7,8 @@ if set -q fish_theme
     set fish_theme custom-theme
   end
 end
+
+function __customtheme_check_prompt --on-event fish_prompt -d 'Check your custom theme against the vanilla one.'
+  __customtheme_fish_prompt
+  __customtheme_fish_right_prompt
+end
