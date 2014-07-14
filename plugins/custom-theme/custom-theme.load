@@ -1,0 +1,9 @@
+# Dynamic custom Theme loader
+# Will notice you if the original theme your custom theme is based on has changed.
+
+if set -q fish_theme
+  if test $fish_theme != custom-theme
+    set -g fish_custom_theme $fish_theme
+    set fish_theme custom-theme
+  end
+end
