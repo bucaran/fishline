@@ -12,3 +12,20 @@ function __customtheme_check_prompt --on-event fish_prompt -d 'Check your custom
   __customtheme_fish_prompt
   __customtheme_fish_right_prompt
 end
+
+function __load_system_fish_prompt
+  if test -f /etc/fish/functions/fish_prompt.fish
+	 source /etc/fish/functions/fish_prompt.fish
+  else if test -f /usr/share/fish/functions/fish_prompt.fish
+  	 source /usr/share/fish/functions/fish_prompt.fish
+  end
+end
+
+function __load_system_fish_right_prompt
+  if test -f /etc/fish/functions/fish_right_prompt.fish
+	 source /etc/fish/functions/fish_right_prompt.fish
+  else if test -f /usr/share/fish/functions/fish_right_prompt.fish
+  	 source /usr/share/fish/functions/fish_right_prompt.fish
+  end
+end
+
