@@ -1,11 +1,23 @@
 # Dynamic custom Theme loader
 # Will notice you if the original theme your custom theme is based on has changed.
 
-if set -q fish_theme
-  if test $fish_theme != custom-theme
-    set -g fish_custom_theme $fish_theme
-    set fish_theme custom-theme
+function __customtheme_init_global
+  set -g __customtheme_oh_my_fish_path (status -f|command sed 's-/custom.*\?$--')
+
+  set -lx GIT_DIR "$__customtheme_oh_my_fish_path/.git"
+  set -lx GIT_WORK_TREE "$__customtheme_oh_my_fish_path"
+
+  if command git status > /dev/null ^&1
+	 set -g __customtheme_git_check_ok
   end
+
+  if set -q fish_theme
+	 if test $fish_theme != custom-theme
+		set -g fish_custom_theme $fish_theme
+  		set fish_theme custom-theme
+    end
+  end
+
 end
 
 function __customtheme_check_prompt --on-event fish_prompt -d 'Check your custom theme against the vanilla one.'
@@ -45,3 +57,5 @@ function __load_system_fish_right_prompt
   end
 end
 
+
+__customtheme_init_global
