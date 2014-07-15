@@ -10,7 +10,23 @@ end
 
 function __customtheme_check_prompt --on-event fish_prompt -d 'Check your custom theme against the vanilla one.'
   __customtheme_fish_prompt
+  set -l retval_fish_prompt $status
   __customtheme_fish_right_prompt
+  set -l retval_fish_right_prompt $status
+
+  if test $retval_fish_prompt -ne 0 -o $retval_fish_right_prompt -ne 0
+	 set_color -b white red
+	 echo The theme $fish_custom_theme has been changed.
+
+	 if test $retval_fish_prompt -ne 0
+		echo Please check your fish_prompt.fish file.
+	 end
+	 if test $retval_fish_right_prompt -ne 0
+		echo Please check your fish_right_prompt.fish file.
+	 end
+
+	 set_color normal
+  end
 end
 
 function __load_system_fish_prompt

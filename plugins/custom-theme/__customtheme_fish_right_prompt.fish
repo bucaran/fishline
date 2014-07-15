@@ -1,4 +1,5 @@
 function __customtheme_fish_right_prompt
+  set -l retval 0
 
   # Testing the current version of the theme against the current custom
   # Print a warning if the file has been changed.
@@ -27,9 +28,7 @@ function __customtheme_fish_right_prompt
 		# The theme has been changed !
       else if not test $$theme_version = $current_theme_version
 		  if test $$custom_version = $current_custom_version
-			 set_color red
-  			 echo -e "The theme '$fish_custom_theme' has been changed.\nAn update to your fish_right_prompt.fish is necessary."
-			 set_color normal
+			 set retval 1
 		  else
 			 set -U $theme_version $current_theme_version
 			 set -U $custom_version $current_custom_version
@@ -41,4 +40,5 @@ function __customtheme_fish_right_prompt
     end
   end
 
+  return $retval
 end
