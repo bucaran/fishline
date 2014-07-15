@@ -20,19 +20,23 @@ function __customtheme_fish_prompt
       sed 's- /.*$--;s/^\([^0-9]*[0-9]\+\)\{3\} //')
 
       if not set -q $theme_version 
-    	   or not set -q $custom_version
-
-  	   set -U $theme_version $current_theme_version
-  	   set -U $custom_version $current_custom_version
-      else if not test $$theme_version = $current_theme_version
-  	   if test $$custom_version = $current_custom_version
-    		  set_color red
-  	  	  echo -e "The theme '$fish_custom_theme' has been changed.\nAn update to your custom file is necessary."
-    		  set_color normal
-  	   else
+		  or not set -q $custom_version
   		  set -U $theme_version $current_theme_version
-    		  set -U $custom_version $current_custom_version
-  	   end
+  		  set -U $custom_version $current_custom_version
+
+		# The theme has been changed !
+      else if not test $$theme_version = $current_theme_version
+		  if test $$custom_version = $current_custom_version
+			 set_color red
+  			 echo -e "The theme '$fish_custom_theme' has been changed.\nAn update to your custom file is necessary."
+			 set_color normal
+		  else
+			 set -U $theme_version $current_theme_version
+			 set -U $custom_version $current_custom_version
+		  end
+		# The Theme hasn't been changed, but the custom file has.
+		else if test $$custom_version != $current_custom_version
+  		  set -U $custom_version $current_custom_version
       end
     end
   end
