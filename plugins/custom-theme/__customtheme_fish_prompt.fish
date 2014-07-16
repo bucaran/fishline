@@ -18,20 +18,20 @@ function __customtheme_fish_prompt
       set -l current_theme_version (command git log -n 1 -- "$theme_path" | command grep commit)
 
       if not set -q $theme_version 
-  		  set -U $theme_version $current_theme_version
+        set -U $theme_version $current_theme_version
 
-		# The theme has been changed !
+    # The theme has been changed !
       else if not test $$theme_version = $current_theme_version
-  		  set -l current_custom_version (command ls -lon --time-style +%s "$custom_path"|\
-  		  command sed 's- /.*$--;s/^\([^0-9]*[0-9]\+\)\{3\} //')
-		  if not set -q $custom_version
-  			 set -U $custom_version $current_custom_version
-		  else if test $$custom_version = $current_custom_version
-			 set retval 1
-		  else
-			 set -U $theme_version $current_theme_version
-			 set -e $custom_version
-		  end
+        set -l current_custom_version (command ls -lon --time-style +%s "$custom_path"|\
+        command sed 's- /.*$--;s/^\([^0-9]*[0-9]\+\)\{3\} //')
+        if not set -q $custom_version
+          set -U $custom_version $current_custom_version
+        else if test $$custom_version = $current_custom_version
+          set retval 1
+        else
+          set -U $theme_version $current_theme_version
+          set -e $custom_version
+        end
       end
     end
   end
