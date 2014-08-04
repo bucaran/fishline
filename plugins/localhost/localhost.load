@@ -10,7 +10,14 @@
 
 ## Functions
 function _open-installed
-  which open >/dev/null ^&1
+  switch (uname)
+		case Darwin
+			which open >/dev/null ^&1 
+    case Linux
+      if which xdg-open >/dev/null ^&1 
+      	alias open xdg-open
+      end
+  end
 end
 
 ## Main program
@@ -22,7 +29,7 @@ function lh
     end
     command open http://localhost:$argv
   else
-    echo 'Requires open (MacOS only) to be installed'
+    echo 'Requires open(MacOS) or xdg-open(GNU/Linux) to be installed'
   end
 end
 
