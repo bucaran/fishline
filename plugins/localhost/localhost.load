@@ -15,9 +15,10 @@ function _open
     case Darwin
       echo "open"
     case Linux
-     echo "xdg-open"
+      echo "xdg-open"
   end
 end
+
 function _open-installed
   which (_open) >/dev/null ^&1
 end
