@@ -9,25 +9,29 @@
 # $ lh 3001
 
 ## Functions
-function _open-installed
+
+function _open
   switch (uname)
-		case Darwin
-			which open >/dev/null ^&1 
+    case Darwin
+      echo "open"
     case Linux
-      if which xdg-open >/dev/null ^&1 
-      	alias open xdg-open
-      end
+     echo "xdg-open"
   end
 end
+function _open-installed
+  which (_open) >/dev/null ^&1
+end
+
 
 ## Main program
 function lh
   if _open-installed
+    set execute (_open)
     if [ (count $argv) -lt 1 ]
         echo "You need to specify a port to open"
         return 1
     end
-    command open http://localhost:$argv
+    eval $execute http://localhost:$argv
   else
     echo 'Requires open(MacOS) or xdg-open(GNU/Linux) to be installed'
   end
