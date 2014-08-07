@@ -1,5 +1,5 @@
 
-set -l oh_my_fish_path (status -f|command sed 's-/custom.*\?$--')
+set -l oh_my_fish_path (status -f|command sed -r 's#(/custom)?/themes/custom-theme.*?$##')
 
 set -l theme_path $oh_my_fish_path/themes/$fish_custom_theme/fish_prompt.fish
 set -l custom_path $oh_my_fish_path/custom/themes/$fish_custom_theme/fish_prompt.fish
