@@ -10,11 +10,11 @@ function __customtheme_fish_right_prompt
   set -l theme_path $__customtheme_oh_my_fish_path/themes/$fish_custom_theme/fish_right_prompt.fish
   set -l custom_path $__customtheme_oh_my_fish_path/custom/themes/$fish_custom_theme/fish_right_prompt.fish
 
-  set -l theme_version __customtheme_theme_right_prompt_version_$fish_custom_theme
-  set -l custom_version __customtheme_custom_right_prompt_version_$fish_custom_theme
+  set -l theme_version "__customtheme_theme_right_prompt_version_$fish_custom_theme"
+  set -l custom_version "__customtheme_custom_right_prompt_version_$fish_custom_theme"
 
   if set -q __customtheme_git_check_ok
-    if test -f "$theme_path" ; and test -f "$custom_path"
+    if begin; test -f "$theme_path" ; and test -f "$custom_path"; end;
       set -l current_theme_version (command git log -n 1 -- "$theme_path" | command grep commit)
 
       if not set -q $theme_version 
@@ -26,6 +26,7 @@ function __customtheme_fish_right_prompt
         command sed 's- /.*$--;s/^\([^0-9]*[0-9]\+\)\{3\} //')
         if not set -q $custom_version
           set -U $custom_version $current_custom_version
+          set retval 1
         else if test $$custom_version = $current_custom_version
           set retval 1
         else
