@@ -6,7 +6,9 @@ set -l custom_path $oh_my_fish_path/custom/themes/$fish_custom_theme/fish_prompt
 
 # Assuming that if COLORTERM isn't set we are in a tty
 # In a tty fallback to system fish_prompt
-if not set -q COLORTERM
+#not set -q COLORTERM; and not set -q TMUX
+#if test x$status = x'0'
+if test x$TERM = x'linux'
   __load_system_fish_prompt
 else if test -f "$custom_path"
   source $custom_path
