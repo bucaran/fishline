@@ -53,7 +53,7 @@ If you wish to use fish as your default shell, use the following commands:
 
 ### Linux
 ````
-grep -q '^/usr/local/bin/fish$' /etc/shells
+grep -q '^/usr/local/bin/fish$' /etc/shells; or echo '/usr/local/bin/fish' | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/fish
 ````
 
