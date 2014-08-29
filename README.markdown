@@ -49,11 +49,19 @@ I'm hoping to collect a bunch of themes for our command prompts. You can see exi
 
 ## Switching to fish
 
-If you wish to use fish as your default shell, use the following command:
+If you wish to use fish as your default shell, use the following commands:
 
-    grep -q '^/usr/local/bin/fish$' /etc/shells; or echo '/usr/local/bin/fish' | sudo tee -a /etc/shells
-    chsh -s /usr/local/bin/fish
+### Linux
+````
+grep -q '^/usr/local/bin/fish$' /etc/shells; or echo '/usr/local/bin/fish' | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
+````
 
+### OS X
+````
+echo '/usr/local/bin/fish' | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
+````
 chsh will prompt you for your password, and change your default shell.
 
 To switch your default shell back, you can run:
