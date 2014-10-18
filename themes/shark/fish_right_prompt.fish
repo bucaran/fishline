@@ -23,9 +23,9 @@ set -g __fish_git_prompt_color_suffix red bold
 
 
 function fish_right_prompt
-	if [ (__fish_git_prompt) ]
+  if [ (__fish_git_prompt) ]
 
-		echo (__fish_git_prompt "[%s]")
-		set_color normal
-	end
+    echo (__fish_git_prompt "[%s]")
+    set_color normal
+  end
 end
