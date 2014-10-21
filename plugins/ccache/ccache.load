@@ -1,0 +1,8 @@
+set -gx USE_CCACHE 1
+set -gx CCACHE_PATH /usr/bin
+
+if test -n "$CCACHE_ROOT"
+  _append_path $CCACHE_ROOT
+else
+  _append_path /usr/lib/ccache/bin
+end

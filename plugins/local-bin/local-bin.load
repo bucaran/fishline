@@ -1,0 +1,5 @@
+if test -n "$LOCAL_BIN_ROOT"
+  _append_path $LOCAL_BIN_ROOT
+else
+  _append_path $HOME/bin
+end
