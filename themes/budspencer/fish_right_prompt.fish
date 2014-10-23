@@ -219,7 +219,7 @@ function __budspencer_prompt_pwd -d 'Displays the present working directory'
         case short
             echo -n $user_host(prompt_pwd)' '
         case long
-            echo -n $user_host$PWD' '
+            echo -n $user_host(pwd)' '
         end
     else
         echo -n " $budspencer_prompt_error "

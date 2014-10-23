@@ -40,7 +40,7 @@ if [ $fish_key_bindings = 'fish_vi_key_bindings' ]
     bind H __budspencer_cd_prev
     bind m mark
     bind M unmark
-    bind . __budspencer_edit_comandline
+    bind . __budspencer_edit_commandline
     bind -M insert \n __budspencer_preexec
     bind \n __budspencer_preexec
 end
@@ -446,7 +446,7 @@ end
 #####################################
 # => Commandline editing with $EDITOR
 #####################################
-function __budspencer_edit_comandline -d 'Open current commandline with your editor'
+function __budspencer_edit_commandline -d 'Open current commandline with your editor'
     commandline > $budspencer_tmpfile
     eval $EDITOR $budspencer_tmpfile
     if [ -s $budspencer_tmpfile ]
