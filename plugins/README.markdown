@@ -11,6 +11,7 @@
 * __extract__ - Plugin to expand or extract bundled & compressed files
 * __fry__ - starts [fry](https://github.com/terlar/fry) Simple ruby version manager for fish
 * __gi__  - [gitignore.io](http://gitignore.io) cli for fish
+* __heroku__ - Adds completions for the heroku toolbelt
 * __jump__ - A port of [Jeroen Janssens' "jump" utility](http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html) 
 * __localhost__ - Opens http://localhost:3000 (and other ports) in the default browser
 * __mc__ - Plugin to start mc with a shell compliant (bash).
