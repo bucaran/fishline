@@ -1,8 +1,10 @@
 # Plugins
+* __android-sdk__ - [Android SDK](http://developer.android.com/sdk/index.html) integration.
 * __archlinux__ - The Arch Linux Plugins provides a number of plugins to make using arch easier.
 * __autojump__ - makes navigating filesystem much faster. see [autojump article](https://github.com/joelthelion/autojump/wiki) and [video](https://www.youtube.com/watch?v=tnNyoMGnbKg). bindings only, autojump needs to be installed separately.
 * __brew__  [Homebrew](http://brew.sh/) integration
 * __bundler__ use Ruby's [Bundler](http://bundler.io/) automatically for some commands
+* __ccache__ Enable [ccache](http://ccache.samba.org/) to speed up compilation
 * __django__  - helper for Django Unit tests. Cleans the cached modules as well.
 * __ec2__ - exports env variables for Amazon's EC2 management
 * __emoji-clock__ - The current time with half hour accuracy as an emoji symbol
@@ -27,4 +29,5 @@
 * __sublime__ - creates 'subl' command line shortcut to launch [Sublime Text editor](http://sublimetext.com/)
 * __tmux__  -  Plugin to start tmux with support for 256 colours
 * __vi-mode__ - Basic vi key bindings emulation for fish
+* __xdg__ - Setup [xdg](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) environment on Linux
 * __z__ - integration with [z](https://github.com/rupa/z) (autojump alternative)
