@@ -6,6 +6,7 @@
 * __bundler__ use Ruby's [Bundler](http://bundler.io/) automatically for some commands
 * __ccache__ Enable [ccache](http://ccache.samba.org/) to speed up compilation
 * __django__  - helper for Django Unit tests. Cleans the cached modules as well.
+* __custom-theme__ - detect change in themes, and will warn you if it has changed. Fallback to system theme, if the shell is run from a tty.
 * __ec2__ - exports env variables for Amazon's EC2 management
 * __emoji-clock__ - The current time with half hour accuracy as an emoji symbol
 * __extract__ - Plugin to expand or extract bundled & compressed files

@@ -1,0 +1,65 @@
+# Dynamic custom Theme loader
+# Will notice you if the original theme your custom theme is based on has changed.
+
+function __customtheme_init_global
+  set -g __customtheme_oh_my_fish_path (status -f|command sed 's-/custom.*\?$--')
+
+  set -lx GIT_DIR "$__customtheme_oh_my_fish_path/.git"
+  set -lx GIT_WORK_TREE "$__customtheme_oh_my_fish_path"
+
+  if command git status > /dev/null ^&1
+    set -g __customtheme_git_check_ok
+  end
+
+  if set -q fish_theme
+    if test $fish_theme != custom-theme
+      set -g fish_custom_theme $fish_theme
+      set fish_theme custom-theme
+      _append_path $fish_path/themes/$fish_custom_theme fish_function_path
+      _append_path $fish_custom/themes/$fish_custom_theme fish_function_path
+    end
+  end
+
+end
+
+function __customtheme_check_prompt --on-event fish_prompt -d 'Check your custom theme against the vanilla one.'
+  if test -e "$PWD"
+    __customtheme_fish_prompt
+    set -l retval_fish_prompt $status
+    __customtheme_fish_right_prompt
+    set -l retval_fish_right_prompt $status
+
+    if test "$retval_fish_prompt" -ne 0 -o "$retval_fish_right_prompt" -ne 0
+      set_color -b white red
+      echo The theme $fish_custom_theme has been changed.
+
+      if test $retval_fish_prompt -ne 0
+        echo Please check your fish_prompt.fish file.
+      end
+      if test $retval_fish_right_prompt -ne 0
+        echo Please check your fish_right_prompt.fish file.
+      end
+
+      set_color normal
+    end
+  end
+end
+
+function __load_system_fish_prompt
+  if test -f $__fish_sysconfdir/functions/fish_prompt.fish
+    source $__fish_sysconfdir/functions/fish_prompt.fish
+  else if test -f $__fish_datadir/functions/fish_prompt.fish
+    source $__fish_datadir/functions/fish_prompt.fish
+  end
+end
+
+function __load_system_fish_right_prompt
+  if test -f $__fish_sysconfdir/functions/fish_right_prompt.fish
+    source $__fish_sysconfdir/functions/fish_right_prompt.fish
+  else if test -f $__fish_datadir/functions/fish_right_prompt.fish
+    source $__fish_datadir/functions/fish_right_prompt.fish
+  end
+end
+
+
+__customtheme_init_global
