@@ -13,6 +13,7 @@
 * __fry__ – Starts [fry](https://github.com/terlar/fry), a simple Ruby version manager for fish.
 * __gem__ – Ruby gem integration.
 * __gi__ – [gitignore.io](http://gitignore.io) CLI for fish.
+* __git-flow__ – [git-flow](https://github.com/nvie/gitflow) Completion support for git-flow.
 * __jump__ – A port of [Jeroen Janssens’ “jump” utility](http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html).
 * __localhost__ – Opens `http://localhost:3000` (and other ports) in the default browser.
 * __mc__ – Plugin to start mc with a shell compliant (Bash).
