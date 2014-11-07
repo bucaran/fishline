@@ -53,8 +53,8 @@ function fish_prompt
   echo -n (set_color white)"╭─"(set_color normal)
   __user_host
   __current_path
-  __git_status
   __ruby_version
+  __git_status
   echo -e ''
   echo (set_color white)"╰─"(set_color --bold white)"\$ "(set_color normal)
 end
