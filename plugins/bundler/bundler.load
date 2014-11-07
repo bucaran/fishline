@@ -28,7 +28,7 @@ set -l execs annotate      \
              unicorn       \
              unicorn_rails
 
-set -l do_eval (function --help | grep -q '‐‐inherit‐variable'; and echo false)
+set -l do_eval (function --help | grep -q '‐‐inherit‐variable'; and echo false; end)
 
 for executable in $execs
   if test -z "$do_eval"
