@@ -2,6 +2,19 @@
 # Helper functions
 ###
 
+function _fish_add_completion
+  set -l plugin $argv[1]
+  set -l completion_path "plugins/$plugin/completions"
+
+  _append_path $fish_path/$completion_path fish_complete_path
+  _append_path $fish_custom/$completion_path fish_complete_path
+end
+
+function _fish_add_modules
+  _append_path $fish_path/modules fish_function_path
+  _append_path $fish_custom/modules fish_function_path
+end
+
 function _fish_add_plugin
   set -l plugin $argv[1]
   set -l plugin_path "plugins/$plugin"
@@ -10,12 +23,9 @@ function _fish_add_plugin
   _append_path $fish_custom/$plugin_path fish_function_path
 end
 
-function _fish_add_completion
-  set -l plugin $argv[1]
-  set -l completion_path "plugins/$plugin/completions"
-
-  _append_path $fish_path/$completion_path fish_complete_path
-  _append_path $fish_custom/$completion_path fish_complete_path
+function _fish_load_theme
+  _append_path $fish_path/themes/$fish_theme fish_function_path
+  _append_path $fish_custom/themes/$fish_theme fish_function_path
 end
 
 function _fish_source_plugin_load_file
@@ -29,11 +39,6 @@ function _fish_source_plugin_load_file
   if test -e $fish_custom/$load_file_path
     . $fish_custom/$load_file_path
   end
-end
-
-function _fish_load_theme
-  _append_path $fish_path/themes/$fish_theme fish_function_path
-  _append_path $fish_custom/themes/$fish_theme fish_function_path
 end
 
 ###
@@ -54,6 +59,9 @@ set -e fish_function_path[1]
 if not contains $fish_path/functions/ $fish_function_path
   set fish_function_path $fish_path/functions/ $fish_function_path
 end
+
+# Add all modules
+_fish_add_modules
 
 # Add all defined plugins
 for plugin in $fish_plugins
