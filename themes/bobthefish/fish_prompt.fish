@@ -48,6 +48,7 @@ set __bobthefish_med_red    ce000f
 set __bobthefish_dk_red     600
 
 set __bobthefish_slate_blue 255e87
+set __bobthefish_med_blue   005faf
 
 set __bobthefish_lt_orange  f6b117
 set __bobthefish_dk_orange  3a2a03
@@ -60,9 +61,6 @@ set __bobthefish_dk_brown   4d2600
 set __bobthefish_med_brown  803F00
 set __bobthefish_lt_brown   BF5E00
 
-set __bobthefish_dk_blue    1E2933
-set __bobthefish_med_blue   275379
-set __bobthefish_lt_blue    326D9E
 
 # ===========================
 # Helper methods
@@ -311,31 +309,28 @@ function __bobthefish_prompt_dir -d 'Display a shortened form of the current dir
   __bobthefish_path_segment "$PWD"
 end
 
-function __bobthefish_in_virtualfish_virtualenv
-  set -q VIRTUAL_ENV
-end
-
 function __bobthefish_virtualenv_python_version -d 'Get current python version'
-  switch (readlink (which python))
+  set -l python_version (readlink (which python))
+  switch "$python_version"
     case python2
       echo $__bobthefish_superscript_glyph[2]
     case python3
       echo $__bobthefish_superscript_glyph[3]
     case pypy
       echo $__bobthefish_pypy_glyph
-    end
-end
-
-function __bobthefish_virtualenv -d 'Get the current virtualenv'
-  echo $__bobthefish_virtualenv_glyph(__bobthefish_virtualenv_python_version) (basename "$VIRTUAL_ENV")
+  end
 end
 
 function __bobthefish_prompt_virtualfish -d "Display activated virtual environment (only for virtualfish, virtualenv's activate.fish changes prompt by itself)"
-  set flag_bg $__bobthefish_lt_blue
-  set flag_fg $__bobthefish_dk_blue
-  __bobthefish_start_segment $flag_bg $flag_fg
-  set_color $flag_fg --bold
-  echo -n -s (__bobthefish_virtualenv) $flags ' '
+  set -q VIRTUAL_ENV; or return
+  set -l version_glyph (__bobthefish_virtualenv_python_version)
+  if test "$version_glyph"
+    __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey
+    echo -n -s $__bobthefish_virtualenv_glyph $version_glyph
+  end
+  __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey
+  set_color $__bobthefish_lt_grey --bold
+  echo -n -s (basename "$VIRTUAL_ENV") ' '
   set_color normal
 end
 
@@ -347,9 +342,7 @@ end
 function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
   __bobthefish_prompt_status
   __bobthefish_prompt_user
-  if __bobthefish_in_virtualfish_virtualenv
-    __bobthefish_prompt_virtualfish
-  end
+  __bobthefish_prompt_virtualfish
   if __bobthefish_in_git       # TODO: do this right.
     __bobthefish_prompt_git    # if something is in both git and hg, check the length of
   else if __bobthefish_in_hg   # __bobthefish_git_project_dir vs __bobthefish_hg_project_dir
