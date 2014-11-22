@@ -76,8 +76,19 @@ function __bobthefish_hg -d 'Wrapper for hg'
   command hg $argv ^/dev/null
 end
 
+function __bobthefish_check_hg_dir_recursively -d 'Check whether pwd or parents contain .hg dir'
+  set d (pwd)
+  while not [ $d = / ]
+    if test -e $d/.hg
+      return 0
+    end
+    set d (dirname $d)
+  end
+  return 1
+end
+
 function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
-  command which hg >/dev/null 2>&1; and test -e .hg; and __bobthefish_hg root >/dev/null
+  command which hg >/dev/null 2>&1; and __bobthefish_check_hg_dir_recursively; and __bobthefish_hg root >/dev/null
 end
 
 function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
