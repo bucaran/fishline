@@ -48,6 +48,7 @@ set __bobthefish_med_red    ce000f
 set __bobthefish_dk_red     600
 
 set __bobthefish_slate_blue 255e87
+set __bobthefish_med_blue   005faf
 
 set __bobthefish_lt_orange  f6b117
 set __bobthefish_dk_orange  3a2a03
@@ -60,21 +61,18 @@ set __bobthefish_dk_brown   4d2600
 set __bobthefish_med_brown  803F00
 set __bobthefish_lt_brown   BF5E00
 
-set __bobthefish_dk_blue    1E2933
-set __bobthefish_med_blue   275379
-set __bobthefish_lt_blue    326D9E
 
 # ===========================
 # Helper methods
 # ===========================
 
-function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
-  command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
-end
+# function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
+#   command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+# end
 
-function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
-  command which hg > /dev/null 2>&1; and command hg stat > /dev/null 2>&1
-end
+# function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
+#   command which hg > /dev/null 2>&1; and command hg stat > /dev/null 2>&1
+# end
 
 function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
   set -l ref (command git symbolic-ref HEAD 2> /dev/null)
@@ -241,7 +239,7 @@ function __bobthefish_prompt_hg -d 'Display the actual hg state'
     set flag_fg fff
   end
 
-  __bobthefish_path_segment (__bobthefish_hg_project_dir)
+  __bobthefish_path_segment $argv[1]
 
   __bobthefish_start_segment $flag_bg $flag_fg
   echo -n -s $__bobthefish_hg_glyph ' '
@@ -251,7 +249,7 @@ function __bobthefish_prompt_hg -d 'Display the actual hg state'
   echo -n -s (__bobthefish_hg_branch) $flags ' '
   set_color normal
 
-  set -l project_pwd  (__bobthefish_project_pwd (__bobthefish_hg_project_dir))
+  set -l project_pwd  (__bobthefish_project_pwd $argv[1])
   if test "$project_pwd"
     if test -w "$PWD"
       __bobthefish_start_segment 333 999
@@ -288,14 +286,14 @@ function __bobthefish_prompt_git -d 'Display the actual git state'
     end
   end
 
-  __bobthefish_path_segment (__bobthefish_git_project_dir)
+  __bobthefish_path_segment $argv[1]
 
   __bobthefish_start_segment $flag_bg $flag_fg
   set_color $flag_fg --bold
   echo -n -s (__bobthefish_git_branch) $flags ' '
   set_color normal
 
-  set -l project_pwd  (__bobthefish_project_pwd (__bobthefish_git_project_dir))
+  set -l project_pwd  (__bobthefish_project_pwd $argv[1])
   if test "$project_pwd"
     if test -w "$PWD"
       __bobthefish_start_segment 333 999
@@ -311,31 +309,28 @@ function __bobthefish_prompt_dir -d 'Display a shortened form of the current dir
   __bobthefish_path_segment "$PWD"
 end
 
-function __bobthefish_in_virtualfish_virtualenv
-  set -q VIRTUAL_ENV
-end
-
 function __bobthefish_virtualenv_python_version -d 'Get current python version'
-  switch (readlink (which python))
+  set -l python_version (readlink (which python))
+  switch "$python_version"
     case python2
       echo $__bobthefish_superscript_glyph[2]
     case python3
       echo $__bobthefish_superscript_glyph[3]
     case pypy
       echo $__bobthefish_pypy_glyph
-    end
-end
-
-function __bobthefish_virtualenv -d 'Get the current virtualenv'
-  echo $__bobthefish_virtualenv_glyph(__bobthefish_virtualenv_python_version) (basename "$VIRTUAL_ENV")
+  end
 end
 
 function __bobthefish_prompt_virtualfish -d "Display activated virtual environment (only for virtualfish, virtualenv's activate.fish changes prompt by itself)"
-  set flag_bg $__bobthefish_lt_blue
-  set flag_fg $__bobthefish_dk_blue
-  __bobthefish_start_segment $flag_bg $flag_fg
-  set_color $flag_fg --bold
-  echo -n -s (__bobthefish_virtualenv) $flags ' '
+  set -q VIRTUAL_ENV; or return
+  set -l version_glyph (__bobthefish_virtualenv_python_version)
+  if test "$version_glyph"
+    __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey
+    echo -n -s $__bobthefish_virtualenv_glyph $version_glyph
+  end
+  __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey
+  set_color $__bobthefish_lt_grey --bold
+  echo -n -s (basename "$VIRTUAL_ENV") ' '
   set_color normal
 end
 
@@ -347,13 +342,14 @@ end
 function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
   __bobthefish_prompt_status
   __bobthefish_prompt_user
-  if __bobthefish_in_virtualfish_virtualenv
-    __bobthefish_prompt_virtualfish
-  end
-  if __bobthefish_in_git       # TODO: do this right.
-    __bobthefish_prompt_git    # if something is in both git and hg, check the length of
-  else if __bobthefish_in_hg   # __bobthefish_git_project_dir vs __bobthefish_hg_project_dir
-    __bobthefish_prompt_hg     # and pick the longer of the two.
+  __bobthefish_prompt_virtualfish
+
+  set -l git_root (__bobthefish_git_project_dir)
+  set -l hg_root  (__bobthefish_hg_project_dir)
+  if test (echo "$hg_root" | wc -c) -gt (echo "$git_root" | wc -c)
+    __bobthefish_prompt_hg $hg_root
+  else if test "$git_root"
+    __bobthefish_prompt_git $git_root
   else
     __bobthefish_prompt_dir
   end
