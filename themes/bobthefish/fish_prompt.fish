@@ -12,8 +12,15 @@
 #
 # You can override some default options in your config.fish:
 #
+#     set -g theme_display_git no
+#     set -g theme_display_hg no
+#     set -g theme_display_virtualenv no
 #     set -g theme_display_user yes
 #     set -g default_user your_normal_user
+
+set -q theme_display_git; or set -g theme_display_git yes
+set -q theme_display_hg; or set -g theme_display_hg yes
+set -q theme_display_virtualenv; or set -g theme_display_virtualenv yes
 
 set -g __bobthefish_current_bg NONE
 
@@ -69,7 +76,7 @@ set __bobthefish_lt_blue    326D9E
 # ===========================
 
 function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
-  command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+  [ "$theme_display_git" = 'yes' ]; and command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
 end
 
 function __bobthefish_hg -d 'Wrapper for hg'
@@ -88,7 +95,7 @@ function __bobthefish_check_hg_dir_recursively -d 'Check whether pwd or parents 
 end
 
 function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
-  command which hg >/dev/null 2>&1; and __bobthefish_check_hg_dir_recursively; and __bobthefish_hg root >/dev/null
+  [ "$theme_display_hg" = 'yes' ]; and command which hg >/dev/null 2>&1; and __bobthefish_check_hg_dir_recursively; and __bobthefish_hg root >/dev/null
 end
 
 function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
@@ -327,7 +334,7 @@ function __bobthefish_prompt_dir -d 'Display a shortened form of the current dir
 end
 
 function __bobthefish_in_virtualfish_virtualenv
-  set -q VIRTUAL_ENV
+  [ "$theme_display_virtualenv" = 'yes' ]; and set -q VIRTUAL_ENV
 end
 
 function __bobthefish_virtualenv_python_version -d 'Get current python version'
