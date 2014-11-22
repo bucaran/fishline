@@ -31,6 +31,12 @@ set __bobthefish_detached_glyph          \u27A6
 set __bobthefish_nonzero_exit_glyph      '! '
 set __bobthefish_superuser_glyph         '$ '
 set __bobthefish_bg_job_glyph            '% '
+set __bobthefish_hg_glyph                \u263F
+
+# Python glyphs
+set __bobthefish_superscript_glyph       \u00B9 \u00B2 \u00B3
+set __bobthefish_virtualenv_glyph        \u25F0
+set __bobthefish_pypy_glyph              \u1D56
 
 # Colors
 set __bobthefish_lt_green   addc10
@@ -50,12 +56,24 @@ set __bobthefish_dk_grey    333
 set __bobthefish_med_grey   999
 set __bobthefish_lt_grey    ccc
 
+set __bobthefish_dk_brown   4d2600
+set __bobthefish_med_brown  803F00
+set __bobthefish_lt_brown   BF5E00
+
+set __bobthefish_dk_blue    1E2933
+set __bobthefish_med_blue   275379
+set __bobthefish_lt_blue    326D9E
+
 # ===========================
 # Helper methods
 # ===========================
 
 function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
-  command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+  command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+end
+
+function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
+  command which hg > /dev/null 2>&1; and command hg stat > /dev/null 2>&1
 end
 
 function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
@@ -67,17 +85,26 @@ function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
   echo $ref | sed  "s-refs/heads/-$__bobthefish_branch_glyph -"
 end
 
+function __bobthefish_hg_branch -d 'Get the current hg branch'
+  set -l branch (hg branch ^/dev/null)
+  set -l book " @ "(hg book | grep \* | cut -d\  -f3)
+  echo "$__bobthefish_branch_glyph $branch$book"
+end
+
 function __bobthefish_pretty_parent -d 'Print a parent directory, shortened to fit the prompt'
   echo -n (dirname $argv[1]) | sed -e 's|/private||' -e "s|^$HOME|~|" -e 's-/\(\.\{0,1\}[^/]\)\([^/]*\)-/\1-g' -e 's|/$||'
 end
 
-function __bobthefish_project_dir -d 'Print the current git project base directory'
+function __bobthefish_git_project_dir -d 'Print the current git project base directory'
   command git rev-parse --show-toplevel 2>/dev/null
 end
 
+function __bobthefish_hg_project_dir -d 'Print the current hg project base directory'
+  command hg root 2>/dev/null
+end
+
 function __bobthefish_project_pwd -d 'Print the working directory relative to project root'
-  set -l base_dir (__bobthefish_project_dir)
-  echo "$PWD" | sed -e "s*$base_dir**g" -e 's*^/**'
+  echo "$PWD" | sed -e "s*$argv[1]**g" -e 's*^/**'
 end
 
 
@@ -154,7 +181,7 @@ function __bobthefish_prompt_status -d 'Display symbols for a non zero exit stat
   set -l bg_jobs
 
   # Last exit was nonzero
-  if [ $RETVAL -ne 0 ]
+  if [ $status -ne 0 ]
     set nonzero $__bobthefish_nonzero_exit_glyph
   end
 
@@ -201,6 +228,41 @@ function __bobthefish_prompt_user -d 'Display actual user if different from $def
   end
 end
 
+function __bobthefish_prompt_hg -d 'Display the actual hg state'
+  set -l dirty   (command hg stat; or echo -n '*')
+
+  set -l flags "$dirty"
+  test "$flags"; and set flags ""
+
+  set -l flag_bg $__bobthefish_lt_green
+  set -l flag_fg $__bobthefish_dk_green
+  if test "$dirty"
+    set flag_bg $__bobthefish_med_red
+    set flag_fg fff
+  end
+
+  __bobthefish_path_segment (__bobthefish_hg_project_dir)
+
+  __bobthefish_start_segment $flag_bg $flag_fg
+  echo -n -s $__bobthefish_hg_glyph ' '
+
+  __bobthefish_start_segment $flag_bg $flag_fg
+  set_color $flag_fg --bold
+  echo -n -s (__bobthefish_hg_branch) $flags ' '
+  set_color normal
+
+  set -l project_pwd  (__bobthefish_project_pwd (__bobthefish_hg_project_dir))
+  if test "$project_pwd"
+    if test -w "$PWD"
+      __bobthefish_start_segment 333 999
+    else
+      __bobthefish_start_segment $__bobthefish_med_red $__bobthefish_lt_red
+    end
+
+    echo -n -s $project_pwd ' '
+  end
+end
+
 # TODO: clean up the fugly $ahead business
 function __bobthefish_prompt_git -d 'Display the actual git state'
   set -l dirty   (command git diff --no-ext-diff --quiet --exit-code; or echo -n '*')
@@ -226,14 +288,14 @@ function __bobthefish_prompt_git -d 'Display the actual git state'
     end
   end
 
-  __bobthefish_path_segment (__bobthefish_project_dir)
+  __bobthefish_path_segment (__bobthefish_git_project_dir)
 
   __bobthefish_start_segment $flag_bg $flag_fg
   set_color $flag_fg --bold
   echo -n -s (__bobthefish_git_branch) $flags ' '
   set_color normal
 
-  set -l project_pwd  (__bobthefish_project_pwd)
+  set -l project_pwd  (__bobthefish_project_pwd (__bobthefish_git_project_dir))
   if test "$project_pwd"
     if test -w "$PWD"
       __bobthefish_start_segment 333 999
@@ -249,17 +311,49 @@ function __bobthefish_prompt_dir -d 'Display a shortened form of the current dir
   __bobthefish_path_segment "$PWD"
 end
 
+function __bobthefish_in_virtualfish_virtualenv
+  set -q VIRTUAL_ENV
+end
+
+function __bobthefish_virtualenv_python_version -d 'Get current python version'
+  switch (readlink (which python))
+    case python2
+      echo $__bobthefish_superscript_glyph[2]
+    case python3
+      echo $__bobthefish_superscript_glyph[3]
+    case pypy
+      echo $__bobthefish_pypy_glyph
+    end
+end
+
+function __bobthefish_virtualenv -d 'Get the current virtualenv'
+  echo $__bobthefish_virtualenv_glyph(__bobthefish_virtualenv_python_version) (basename "$VIRTUAL_ENV")
+end
+
+function __bobthefish_prompt_virtualfish -d "Display activated virtual environment (only for virtualfish, virtualenv's activate.fish changes prompt by itself)"
+  set flag_bg $__bobthefish_lt_blue
+  set flag_fg $__bobthefish_dk_blue
+  __bobthefish_start_segment $flag_bg $flag_fg
+  set_color $flag_fg --bold
+  echo -n -s (__bobthefish_virtualenv) $flags ' '
+  set_color normal
+end
+
 
 # ===========================
 # Apply theme
 # ===========================
 
 function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
-  set -g RETVAL $status
   __bobthefish_prompt_status
   __bobthefish_prompt_user
-  if __bobthefish_in_git
-    __bobthefish_prompt_git
+  if __bobthefish_in_virtualfish_virtualenv
+    __bobthefish_prompt_virtualfish
+  end
+  if __bobthefish_in_git       # TODO: do this right.
+    __bobthefish_prompt_git    # if something is in both git and hg, check the length of
+  else if __bobthefish_in_hg   # __bobthefish_git_project_dir vs __bobthefish_hg_project_dir
+    __bobthefish_prompt_hg     # and pick the longer of the two.
   else
     __bobthefish_prompt_dir
   end
