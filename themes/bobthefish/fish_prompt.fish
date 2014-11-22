@@ -72,8 +72,12 @@ function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
   command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
 end
 
+function __bobthefish_hg -d 'Wrapper for hg'
+  command hg $argv ^/dev/null
+end
+
 function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
-  command which hg > /dev/null 2>&1; and command hg stat > /dev/null 2>&1
+  command which hg > /dev/null 2>&1; and __bobthefish_hg stat >/dev/null
 end
 
 function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
@@ -86,8 +90,8 @@ function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
 end
 
 function __bobthefish_hg_branch -d 'Get the current hg branch'
-  set -l branch (hg branch ^/dev/null)
-  set -l book " @ "(hg book | grep \* | cut -d\  -f3)
+  set -l branch (__bobthefish_hg branch)
+  set -l book " @ "(__bobthefish_hg book | grep \* | cut -d\  -f3)
   echo "$__bobthefish_branch_glyph $branch$book"
 end
 
@@ -100,7 +104,7 @@ function __bobthefish_git_project_dir -d 'Print the current git project base dir
 end
 
 function __bobthefish_hg_project_dir -d 'Print the current hg project base directory'
-  command hg root 2>/dev/null
+  __bobthefish_hg root
 end
 
 function __bobthefish_project_pwd -d 'Print the working directory relative to project root'
@@ -229,7 +233,7 @@ function __bobthefish_prompt_user -d 'Display actual user if different from $def
 end
 
 function __bobthefish_prompt_hg -d 'Display the actual hg state'
-  set -l dirty   (command hg stat; or echo -n '*')
+  set -l dirty (__bobthefish_hg stat; or echo -n '*')
 
   set -l flags "$dirty"
   test "$flags"; and set flags ""
