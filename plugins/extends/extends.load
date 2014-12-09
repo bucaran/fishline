@@ -1,0 +1,13 @@
+function _extends
+    if test (count $argv) -gt 0
+            set func_name "_"$_"-"$argv[1]
+
+            if functions -a | grep "$func_name" 1>/dev/null 2>/dev/null
+                eval $func_name $argv
+            else
+                eval command $_ $argv
+            end
+    else
+        eval command $_
+    end
+end
