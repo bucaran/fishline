@@ -9,6 +9,7 @@
 * __django__ – Helper for Django Unit tests. Cleans the cached modules as well.
 * __ec2__ – Exports env variables for Amazon's EC2 management.
 * __emoji-clock__ – The current time with half hour accuracy as an emoji symbol.
+* __extends__ – Extends programs and adds commands to them.
 * __extract__ – Plugin to expand or extract bundled & compressed files.
 * __fry__ – Starts [fry](https://github.com/terlar/fry), a simple Ruby version manager for fish.
 * __gem__ – Ruby gem integration.
