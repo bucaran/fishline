@@ -1,13 +1,56 @@
-function _extends
-    if test (count $argv) -gt 0
-            set func_name "_"$_"-"$argv[1]
+# Author 
+#     Josemi Liébana <office@josemi-liebana.com>
+#
+# Version 0.1.0
 
-            if functions -a | grep "$func_name" 1>/dev/null 2>/dev/null
-                eval $func_name $argv
-            else
-                eval command $_ $argv
-            end
+function _extends
+
+    if test (count $argv) -gt 0
+        set -g extends_plugin $_
+        set -l func_name "_"$_"-"$argv[1]
+
+        if functions -a | grep "$func_name" 1>/dev/null 2>/dev/null
+            eval $func_name $argv
+        else
+            eval command $_ $argv
+        end
     else
         eval command $_
+    end
+end
+
+function _extends-help --description 'Extends the program help and add our functions to it'
+    if test (count $argv) -gt 0
+        set -l invoke $argv[1]
+    else
+        echo "You have to specify how to invoke help for $extends_plugin"
+        exit 1
+    end
+
+    set -l output
+    set -l pattern "_$extends_plugin-"
+
+    begin
+        set -l IFS;
+        set output (eval command $extends_plugin $invoke)
+    end
+
+    set -l plugin_functions (functions -a | grep "^$pattern" | grep -v help | sed "s/\\$pattern//g")
+
+    echo -e "$output"
+
+    if test (count $plugin_functions) -gt 0
+        echo -ne "\n    Added automatically from the _extends plugin"
+        set_color green
+        echo -e " (_$extends_plugin-):"
+        set_color yellow
+
+        set -l help_output
+        for plugin_function in $plugin_functions
+            set help_output "$help_output\n        ● $plugin_function"
+        end
+
+        echo -e "$help_output\n"
+        set_color normal
     end
 end
