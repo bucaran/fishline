@@ -8,6 +8,12 @@ function _fish_add_plugin
 
   _prepend_path $fish_path/$plugin_path fish_function_path
   _prepend_path $fish_custom/$plugin_path fish_function_path
+
+  # For plugins loading other plugins, make sure to add completions
+  # and other dependencies defined in the `plugin.load` file.
+
+  _fish_add_completion $plugin
+  _fish_source_plugin_load_file $plugin
 end
 
 function _fish_add_completion
@@ -58,8 +64,6 @@ end
 # Add all defined plugins
 for plugin in $fish_plugins
   _fish_add_plugin $plugin
-  _fish_add_completion $plugin
-  _fish_source_plugin_load_file $plugin
 end
 
 # Load user defined theme
