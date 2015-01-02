@@ -1,9 +1,8 @@
-#
 # NAME
-#      _prepend_tree - add a dependency tree to a path
+#      require_tree - add a dependency tree to a path
 #
 # SYNOPSIS
-#      _prepend_tree [-P --preview] <source path> [<glob>..]
+#      require_tree [-P --preview] <source path> [<glob>..]
 #                    [-d --destination <destination path>]
 #
 # DESCRIPTION
@@ -53,18 +52,18 @@
 #          If not used, the $fish_function_path is assumed by default.
 #
 # EXAMPLES
-#      _prepend_tree $lib_path
+#      require_tree $lib_path
 #          Prepends all directories inside $lib_path containing `.fish`
 #          files to $fish_function_path.
 #
-#      _prepend_tree $lib_path -d PATH
+#      require_tree $lib_path -d PATH
 #          Prepends all directories inside $lib_path containing .fish
 #          files to a global variable named PATH.
 #
-#      _prepend_tree $lib_path \*.fish \*.sh
+#      require_tree $lib_path \*.fish \*.sh
 #          Prepends sub directories with either `.fish` OR `.sh` files.
 #
-#      _prepend_tree $lib_path \*.css -a ! _\*.\* -d PATH
+#      require_tree $lib_path \*.css -a ! _\*.\* -d PATH
 #          Prepends sub directories that have `.css` extension, but do
 #          not start with `_`.
 #
@@ -74,15 +73,15 @@
 # SEE ALSO
 #      .oh-my-fish/functions/_prepend_path.fish
 #
-# v.0.1.0
+# v.0.1.1
 #/
-function _prepend_tree -d "Load a dependency tree, matching `.fish` files by default."
+function require_tree -d "Load a dependency tree."
   set -l source
   set -l destination fish_function_path
   set -l glob
-  set -l depth 1
-  set -l len (count $argv)
-  set -l preview false
+  set -l depth    1
+  set -l len      (count $argv)
+  set -l preview  false
 
   if [ $len -gt 0 ]
     switch $argv[1]
@@ -97,9 +96,8 @@ function _prepend_tree -d "Load a dependency tree, matching `.fish` files by def
     and set source $argv[1]
     or return 1
 
+  # There should be 3 arguments to use the destination path.
   if [ $len -gt 2 ]
-  # At least 3 arguments must exist
-  # to use the destination path.
     switch $argv[-2]
       case -d --destination
         set destination $argv[-1]
@@ -117,7 +115,7 @@ function _prepend_tree -d "Load a dependency tree, matching `.fish` files by def
         case -a -and
           set operator -a
         case -d --destination
-          break # No more globs after this point.
+          break # No more globs after this.
         case "*"
           [ operator = ! ]
             and set glob $operator $glob
@@ -128,13 +126,15 @@ function _prepend_tree -d "Load a dependency tree, matching `.fish` files by def
     end
   end
 
+  # Add directories with .fish files by default.
   [ -z "$glob" ]
     and set glob -name \*.fish
 
+  # Traverse source tree and _prepend_path with all glob matches.
   for directory in $source/**/
     if not [ -z (find $directory $glob -maxdepth $depth | head -1) ]
-      eval $preview # skip when on preview mode
-        and printf "%s " $directory
+      eval $preview
+        and printf "%s\n" $directory
         or _prepend_path $directory $destination
     end
   end
