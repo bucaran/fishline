@@ -1,4 +1,5 @@
-# Prepends the path to the specified path list. If no list specified, defaults to $PATH
+# Prepend the path to the specified path list.
+# If no list is specified, defaults to $PATH.
 function _prepend_path
   set -l path PATH
 
