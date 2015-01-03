@@ -452,16 +452,3 @@ function msg._.get.color
       printf $argv[1]
   end
 end
-
-function msg._.test
-  set -l dot @random:random "   "
-  for 1 in (seq 6)
-    set dot $dot $dot
-  end
-  msg -sn @black:yellow "    Loading ...  " $dot
-  msg @success ✔ OK
-  msg _msg_ the @yellow:red technicolor __printer__!\
-      \n A _brave_ new __line__.\
-      \n [http://github.com/oh-my-fish] @red → \\[url]\
-      \n /dir/ect/to/ri/es/ @red → \\/directories/
-end

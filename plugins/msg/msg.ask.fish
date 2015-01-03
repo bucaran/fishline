@@ -1,5 +1,5 @@
 # Print a message with msg and wait for y/n input. Return true on y\*.
-# @params See msg.fish
+# @params → msg.fish
 function msg.ask
   msg $argv
   head -n 1 | read answer
