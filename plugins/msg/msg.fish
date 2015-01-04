@@ -1,7 +1,7 @@
 #    __ _  ___ ___ _
 #   /  ' \(_-</ _ `/
 #  /_/_/_/___/\_, /
-#            /___/ v0.1.0
+#            /___/ v0.1.1
 #
 # NAME
 #      msg - technicolor message printer
@@ -19,6 +19,7 @@
 #      _text_                 Bold
 #      __text__               Underline
 #      ___text___             Bold and Underline
+#      `text`                 @<styles> only apply to enclosed text.
 #      /directory/            Directories
 #      [url]                  Links
 #      \n                     Line Break
@@ -31,7 +32,7 @@
 # AUTHORS
 #      @bucaran (Jorge Bucaran)
 #
-# v. 0.1.0
+# v. 0.1.1
 # /
 set --global msg_color_fg   FFFFFF
 set --global msg_color_bg   normal
@@ -76,7 +77,7 @@ function msg -d "Technicolor printer."
 
   for token in $argv
     switch $token
-      case ___\*___\* __\*__\* _\*_\* \[\*\]\* \/\*\/\*
+      case ___\*___\* __\*__\* _\*_\* \[\*\]\* \/\*\/\* `\*`\*
         set -l left   _ # Begin of style
         set -l right  _ # End of style
         set -l color $fg $bg -o
@@ -95,7 +96,11 @@ function msg -d "Technicolor printer."
           case \/\*\/\*
             set color $msg_style_dir
             set left \/
-            set right $left
+            set right \/
+          case `\*`\*
+            set color $fg $bg
+            set left `
+            set right `
         end
         # Extract text inside left and right separators.
         echo -n (msg._.set.color $color)(msg._.str.grab $left $token)$reset
