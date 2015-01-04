@@ -2,12 +2,16 @@
 #      import - load libraries, plugins, themes, etc.
 #
 # SYNOPSIS
-#      import <library>[<library>..]
+#      import <path/library>[<path/library>..]
 #
 # DESCRIPTION
 #      Use to handle plugin interdependencies. Import libraries, plugins,
 #      themes, completions, etc. Prepends custom/<library> to the path to
 #      allow users to customize / override specific functions.
+#
+# EXAMPLES
+#      import plugins/dpaste themes/bobthefish
+#      import plugins/{cask,brew,django}
 #
 # AUTHORS
 #      Jorge Bucaran <jbucaran@me.com>
@@ -38,7 +42,7 @@ function import -d "Load libraries, plugins, themes, etc."
     end
 
     # Traverse the library tree and prepend directories with fish files.
-    _prepend_tree $library
+    _prepend_tree $fish_path/$library
 
     # Source each library (plugin, theme,...) configuration load file.
     for path in $root/$library/(basename $library).load
