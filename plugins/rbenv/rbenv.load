@@ -1,7 +1,11 @@
-set -l rbenv_dir "$RBENV_ROOT"
+set -l rbenv_dir "$ec"
 if [ ! $rbenv_dir ]
   set rbenv_dir $HOME/.rbenv
 end
+# Abort if user has no .rbenv file.
+# https://github.com/sstephenson/rbenv
+[ -e "$HOME/.rbenv" ]
+  or exit
 
 set -l supports_fish
 set -l supports_fish_version '0.4.0'
