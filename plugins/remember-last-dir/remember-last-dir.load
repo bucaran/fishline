@@ -1,0 +1,5 @@
+function __remember_pwd_changes --on-variable PWD
+        set -U LAST_DIR $PWD
+end
+
+cd $LAST_DIR
