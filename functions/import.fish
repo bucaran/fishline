@@ -5,9 +5,9 @@
 #      import <path/library>[<path/library>..]
 #
 # DESCRIPTION
-#      Use to handle plugin interdependencies. Import libraries, plugins,
-#      themes, completions, etc. Prepends custom/<library> to the path to
-#      allow users to customize / override specific functions.
+#      Import libraries, plugins, themes, completions. Prepend existing
+#      user custom/<library> directories to the path to  allow users to
+#      override specific functions.
 #
 # EXAMPLES
 #      import plugins/dpaste themes/bobthefish
