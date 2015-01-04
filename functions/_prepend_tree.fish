@@ -72,8 +72,6 @@ function _prepend_tree -d "Add a dependency tree to the Fish path."
       end
     end
   end
-  # Use basename to sanitize sloppy /paths/.
-  set path (basename $path)
   # Travese $path and prepend only directories with matches.
   for dir in $path $path/**/
     # Use head to retrieve at least the first match.
