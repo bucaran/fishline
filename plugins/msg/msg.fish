@@ -19,7 +19,7 @@
 #      _text_                 Bold
 #      __text__               Underline
 #      ___text___             Bold and Underline
-#      `text`                 @<styles> only apply to enclosed text.
+#      `$variable`            Apply @<styles> to $variables
 #      /directory/            Directories
 #      [url]                  Links
 #      \n                     Line Break
@@ -48,7 +48,7 @@ function msg -d "Technicolor printer."
   # Set style, fg/bg colors and reset. Note this function
   # modifies variables in the parent scope.
   # @params [<fg>] [<bg>] [<style>]
-  function --no-scope-shadowing msg._.set.color
+  function --no-scope-shadowing msg.util.set.color
     [ (count $argv) -gt 0 ]
       and set fg $argv[1]
     [ (count $argv) -gt 1 ]
@@ -68,9 +68,9 @@ function msg -d "Technicolor printer."
   set argv $argv \n
   switch $argv[1]
     case -s\* -n\*
-      msg._.str.has s $argv[1]
+      msg.util.str.has s $argv[1]
         and set ws ""
-      msg._.str.has n $argv[1]
+      msg.util.str.has n $argv[1]
         and set -e argv[-1]
       set -e argv[1]
   end
@@ -83,10 +83,10 @@ function msg -d "Technicolor printer."
         set -l color $fg $bg -o
         switch $token
           case ___\*___\* __\*__\* _\*_\*
-            msg._.str.has __ $token
+            msg.util.str.has __ $token
               and set color[3] -u
               and set left __
-              and msg._.str.has ___ $token
+              and msg.util.str.has ___ $token
                 and set color[3] -uo
                 and set left ___
           case \[\*\]\*
@@ -103,7 +103,7 @@ function msg -d "Technicolor printer."
             set right `
         end
         # Extract text inside left and right separators.
-        echo -n (msg._.set.color $color)(msg._.str.grab $left $token)$reset
+        echo -n (msg.util.set.color $color)(msg.util.str.grab $left $token)$reset
         # Extract string after separator from the right.
         echo -n (printf $token | sed "s/^.*\\$right\(.*\)/\1/")$ws
 
@@ -112,10 +112,10 @@ function msg -d "Technicolor printer."
         set bg (printf $fg | cut -d: -f 2)  # fg:bg    → fg|bg
         set fg (printf $fg | cut -d: -f 1)  # fg:bg    → fg
         [ $bg = $fg ]
-          and not msg._.str.has : $token
+          and not msg.util.str.has : $token
             and set bg $msg_color_bg
-        set fg (msg._.get.color $fg)
-        set bg (msg._.get.color $bg)
+        set fg (msg.util.get.color $fg)
+        set bg (msg.util.get.color $bg)
 
       case \*
         set -l space $ws
@@ -125,7 +125,7 @@ function msg -d "Technicolor printer."
           case \\\[\* \\\/\* \\\_\* # Escape \\[text] and \\/text/
             set token (printf $token | sed "s/^\\\//")
         end
-        echo -en (msg._.set.color)$token$reset
+        echo -en (msg.util.set.color)$token$reset
         [ -z $ws -o $argv[-1] = $token ]
           or echo -n $space
     end
@@ -134,13 +134,13 @@ end
 
 # True if substring exists in string.
 # @params <substring> <string>
-function msg._.str.has
+function msg.util.str.has
   printf $argv[2] | grep -q $argv[1]
 end
 
 # Extract string between left and right separators of variable length.
 # @params <left-sep> [<right-sep>] <string>
-function msg._.str.grab
+function msg.util.str.grab
   set -l left   $argv[1]
   set -l right  $argv[1]
   set -l string $argv[2]
@@ -156,16 +156,23 @@ function msg._.str.grab
                    sed "s/^.\{$len\}\(.*\).\{$len\}\$/\1/"
 end
 
-# Print a random RRGGBB hexadecimal color.
-function msg._.random.color
-  printf "%02x%02x%02x" (math (random) "%" 255) \
-                        (math (random) "%" 255) \
-                        (math (random) "%" 255)
+# Print a random RRGGBB hexadecimal color from three min~max random beams
+# where min = 0 and max = 255. Higher values produce lighter colors.
+# @params [<min>][<max>]
+function msg.util.random.color
+  set -l min 0
+  set -l max 255
+  [ (count $argv) -gt 0 ]
+    and set min $argv[1]
+  [ (count $argv) -gt 1 ]
+    and set max $argv[2]
+  set beam "math (random)%\($max-$min+1\)+$min"
+  printf "%02x%02x%02x" (eval $beam) (eval $beam) (eval $beam)
 end
 
 # Translate color names to valid RRGGBB hexadecimal value.
 # @params <color|random>
-function msg._.get.color
+function msg.util.get.color
   [ (count $argv) -lt 1 ]
     and printf $msg_color_fg
   switch $argv[1]
@@ -174,7 +181,11 @@ function msg._.get.color
     case error
       printf "%s\n" $msg_color_err
     case random
-      msg._.random.color
+      msg.util.random.color
+    case light
+      msg.util.random.color 100
+    case dark
+      msg.util.random.color 0 75
    	case maroon
       printf 800000
    	case d\*red
