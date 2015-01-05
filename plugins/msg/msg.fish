@@ -64,8 +64,10 @@ function msg -d "Technicolor printer."
 
   # Default " " whitespace between strings, skip with -s.
   set -l ws " "
-  # Default \n after message, skip with -n.
-  set argv $argv \n
+  # Default \n after message, skip with -n. Don't print nothing.
+  [ (count $argv) -eq 0 ]
+    and return 0
+    or set argv $argv \n
   switch $argv[1]
     case -s\* -n\*
       msg.util.str.has s $argv[1]
@@ -120,13 +122,13 @@ function msg -d "Technicolor printer."
       case \*
         set -l space $ws
         switch $token
-          case \n\* \t\* # No space after \n \t
+          case $argv[-2] \n\* \t\* # No space after \n \t
             set space ""
           case \\\[\* \\\/\* \\\_\* # Escape \\[text] and \\/text/
             set token (printf $token | sed "s/^\\\//")
         end
         echo -en (msg.util.set.color)$token$reset
-        [ -z $ws -o $argv[-1] = $token ]
+        [ -z $ws ]
           or echo -n $space
     end
   end
