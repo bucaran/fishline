@@ -21,12 +21,13 @@ end
 # as the theme. Use the same approach for plugins, etc.
 import plugins/$fish_plugins themes/$fish_theme
 
-# Prepend all user custom paths to $fish_function_path
-_prepend_tree $fish_custom
-
-# Source all files inside custom folder.
-for config_file in $fish_custom/*.load
-  . $config_file
+# Prepend all user custom paths to the fish path and source load files. 
+for custom_file in $fish_custom/**
+  _prepend_path $custom_file -d fish_function_path
+  switch $custom_file
+    case \*.load
+      . $custom_file
+  end
 end
 
 # Prepend extracted user functions so they have the highest priority.
