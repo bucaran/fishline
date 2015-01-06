@@ -6,8 +6,13 @@
 #
 # DESCRIPTION
 #      Import libraries, plugins, themes, completions. Prepend existing
-#      user custom/<library> directories to the path to  allow users to
-#      override specific functions.
+#      user custom/<library> directories to the path to allow users to
+#      override specific functions in themes/plugins.
+#
+# NOTES
+#      $fish_path and $fish_custom point to oh-my-fish home and the user
+#      dotfiles folder respectively. Both globals are usually configured
+#      in ~/.config/fish/config.fish
 #
 # EXAMPLES
 #      import plugins/dpaste themes/bobthefish
@@ -23,18 +28,14 @@
 # v.0.1.1
 #/
 function import -d "Load libraries, plugins, themes, etc."
-  # $fish_path and $fish_custom point to oh-my-fish home and the user
-  # dotfiles folder respectively. Both globals are usually configured
-  # in ~/.config/fish/config.fish
-  set -l root $fish_path $fish_custom
-
   for library in $argv
     # Prepend plugins, themes and completions, as well as user custom paths
     # for plugins and themes to $fish_function_path and $fish_complete_path.
     # The root paths are determined via $fish_path and $fish_custom globals.
-    for path in $root/$library
+    for path in $fish_custom
       _prepend_path $path fish_function_path
     end
+    
     for path in $fish_path/$library/completions
       _prepend_path $path fish_function_path
     end
