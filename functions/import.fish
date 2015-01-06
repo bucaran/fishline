@@ -29,16 +29,14 @@ function import -d "Load libraries, plugins, themes, etc."
   set -l root $fish_path $fish_custom
 
   for library in $argv
-    # Each path expands to create 2 × $root unique paths.
-    set -l paths $root/$library $root/$library/completions
-    set -l plugins     $paths[1..2]" fish_function_path"
-    set -l completions $paths[3..4]" fish_complete_path"
-
-    # Prepend library (plugins, themes, completions) paths and user defined
-    # paths to $fish_function_path and $fish_complete_path. The root paths
-    # are determined via $fish_path and $fish_custom globals.
-    for path in $plugins $completions
-      eval "_prepend_path "$path
+    # Prepend plugins, themes and completions, as well as user custom paths
+    # for plugins and themes to $fish_function_path and $fish_complete_path.
+    # The root paths are determined via $fish_path and $fish_custom globals.
+    for path in $root/$library
+      _prepend_path $path fish_function_path
+    end
+    for path in $fish_path/$library/completions
+      _prepend_path $path fish_function_path
     end
 
     # Traverse a library tree and prepend directories with fish code.
