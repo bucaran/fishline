@@ -15,6 +15,9 @@ if not contains $fish_path/functions/ $fish_function_path
   set fish_function_path $fish_path/functions/ $fish_function_path
 end
 
+# Prepend all user custom paths to $fish_function_path
+_prepend_tree $fish_custom
+
 # Add required plugins, completions and themes. Imported commands can be
 # customized via the $fish_path/custom, including themes and completions.
 # To customize a theme, create a directory under $fish_path/custom/themes

@@ -28,8 +28,6 @@
 # v.0.2.0
 #/
 function import -d "Load libraries, plugins, themes, etc."
-  # Prepend all user custom paths to $fish_function_path
-  _prepend_tree $fish_custom
   for library in $argv
     # Prepend plugins, themes and completions. Also traverse
     # the library tree prepending directories with fish code.
