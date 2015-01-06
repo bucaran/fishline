@@ -1,7 +1,3 @@
-##
-# Initial Configuration
-##
-
 # Set fish_custom to the path where your custom config files
 # and plugins exist, or use the default custom instead.
 if not set -q fish_custom

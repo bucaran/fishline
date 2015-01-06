@@ -85,7 +85,7 @@ function _prepend_tree -d "Add a dependency tree to the Fish path."
     if contains -- $argv[1] -p --preview
       printf "%s\n" $dir
     else
-      _prepend_path $dir fish_function_path
+      _prepend_path $dir -d fish_function_path
     end
   end
 end

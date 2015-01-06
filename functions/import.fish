@@ -25,25 +25,18 @@
 #      functions/_prepend_path.fish
 #      functions/_prepend_tree.fish
 #
-# v.0.1.1
+# v.0.2.0
 #/
 function import -d "Load libraries, plugins, themes, etc."
+  # Prepend all user custom paths to $fish_function_path
+  _prepend_tree $fish_custom
   for library in $argv
-    # Prepend plugins, themes and completions, as well as user custom paths
-    # for plugins and themes to $fish_function_path and $fish_complete_path.
-    # The root paths are determined via $fish_path and $fish_custom globals.
-    for path in $fish_custom
-      _prepend_path $path fish_function_path
-    end
-    
-    for path in $fish_path/$library/completions
-      _prepend_path $path fish_function_path
-    end
-
-    # Traverse a library tree and prepend directories with fish code.
-    # This allows to create project trees with fish code organized in
-    # directories according to the plugin's API.
+    # Prepend plugins, themes and completions. Also traverse
+    # the library tree prepending directories with fish code.
+    # This allows to create project trees  with fish code
+    # organized in directories according to a plugin's API.
     _prepend_tree $fish_path/$library
+    _prepend_path $fish_path/$library/completions -d fish_complete_path
 
     # Source each library (plugin, theme,...) configuration load file.
     for path in $root/$library/(basename $library).load
