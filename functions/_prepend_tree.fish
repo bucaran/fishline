@@ -77,7 +77,7 @@ function _prepend_tree -d "Add a dependency tree to the Fish path."
   end
 
   # Travese $path and prepend only directories with matches.
-  for dir in "$path" "$path"/**
+  for dir in "$path" #"$path"/**
     # Use head to retrieve at least the first match.
     if [ -z (find $dir $glob -maxdepth 1 | head -1) ]
       continue

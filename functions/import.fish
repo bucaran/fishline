@@ -29,10 +29,10 @@
 #/
 function import -d "Load libraries, plugins, themes, etc."
   for library in $argv
-    # Prepend plugins, themes and completions. Also traverse
-    # the library tree prepending directories with fish code.
-    # This allows to create project trees  with fish code
-    # organized in directories according to a plugin's API.
+
+    # Prepend plugins, themes and completions. Also traverse the library
+    # tree prepending directories with fish code. This should encourage
+    # to create project trees with fish code organized in directories.
     _prepend_tree $fish_path/$library
     _prepend_path $fish_path/$library/completions -d fish_complete_path
 
