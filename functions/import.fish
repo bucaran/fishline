@@ -20,7 +20,7 @@
 #      functions/_prepend_path.fish
 #      functions/_prepend_tree.fish
 #
-# v.0.1.0
+# v.0.1.1
 #/
 function import -d "Load libraries, plugins, themes, etc."
   # $fish_path and $fish_custom point to oh-my-fish home and the user
@@ -34,20 +34,23 @@ function import -d "Load libraries, plugins, themes, etc."
     set -l plugins     $paths[1..2]" fish_function_path"
     set -l completions $paths[3..4]" fish_complete_path"
 
-    # Prepend plugins and completion paths to fish_function_path and
-    # fish_complete_path respectively. The root paths are determined
-    # via the global $fish_path and $fish_custom.
+    # Prepend library (plugins, themes, completions) paths and user defined
+    # paths to $fish_function_path and $fish_complete_path. The root paths
+    # are determined via $fish_path and $fish_custom globals.
     for path in $plugins $completions
       eval "_prepend_path "$path
     end
 
-    # Traverse the library tree and prepend directories with fish files.
+    # Traverse a library tree and prepend directories with fish code.
+    # This allows to create project trees with fish code organized in
+    # directories according to the plugin's API.
     _prepend_tree $fish_path/$library
 
     # Source each library (plugin, theme,...) configuration load file.
     for path in $root/$library/(basename $library).load
-      [ -e $path ]
-        and eval ". "$path
+      if [ -e $path ]
+        . $path
+      end
     end
   end
 end
