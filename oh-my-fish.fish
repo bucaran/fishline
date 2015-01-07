@@ -21,7 +21,7 @@ end
 # as the theme. Use the same approach for plugins, etc.
 import plugins/$fish_plugins themes/$fish_theme
 
-# Prepend all user custom paths to the fish path and source load files. 
+# Prepend all user custom paths to the fish path and source load files.
 for custom_file in $fish_custom/**
   _prepend_path $custom_file -d fish_function_path
   switch $custom_file

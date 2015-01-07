@@ -5,8 +5,10 @@
 #      _prepend_tree [-p --preview] <path> [<glob>..]
 #
 # DESCRIPTION
-#      Search a path tree and prepend directories with fish files.
-#      Use a glob list to include / exclude other file extensions.
+#      Search a path tree and prepend directories with fish files
+#      printing any matches by default. Use a glob list to include
+#      or exclude other file extensions. Use -p --preview to just
+#      print matches withouth modifying the path.
 #
 # OPTIONS
 #      [-p --preview]
@@ -76,15 +78,19 @@ function _prepend_tree -d "Add a dependency tree to the Fish path."
     end
   end
 
-  # Travese $path and prepend only directories with matches.
-  for dir in "$path" "$path"/**
+  # Null wildcard expansion will break the for loop even if $path is valid.
+  # $subs will become an empty list for directories without sub directories
+  # which is safe to use in the loop.
+  set -l subs $path/**/
+  
+  # Traverse $path and $subs prepending only directories with matches.
+  for dir in $path $subs
     # Use head to retrieve at least the first match.
     if [ -z (find $dir $glob -maxdepth 1 | head -1) ]
       continue
     end
-    if contains -- $argv[1] -p --preview
-      printf "%s\n" $dir
-    else
+    printf "%s" $dir
+    if not contains -- $argv[1] -p --preview
       _prepend_path $dir -d fish_function_path
     end
   end
