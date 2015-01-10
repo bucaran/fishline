@@ -57,14 +57,12 @@ function load_oh_my_fish
   . $fish_path/oh-my-fish.fish
 end
 
+# Remove item from list. List must be the name of a global variable.
+# @params <item> <list>
 function remove_from_array
-  set -l element $argv[1]
-
-  for i in (seq (count $$argv[2]))
-    if test $$argv[2][$i] = $element
-      set -e $argv[2][$i]
-      break
-    end
+  set -l item $argv[1]
+  if set -l index (contains -i -- $item $$argv[2])
+    set -e $argv[2][$index]
   end
 end
 
