@@ -41,11 +41,15 @@ function spec.run
   if contains -- $argv[1] -v --verbose
     set output ""
   end
-  # Run 1 or more topmost describe blocks causing fish to load inmediately
+
+  # Run 1 or more topmost describe blocks causing fish to load immediately
   # scoped functions, i.e, those inside any invoked describe_ blocks.
   spec.eval describe_ --depth 0 $output
   spec.eval before_all $output
-  for test in (spec.functions "it_")
+
+  set -l test_names (spec.functions "it_")
+
+  for test in $test_names
     spec.eval before_each $output
 
     # Flunk test if any single test fails, but do not stop the suite.
@@ -56,7 +60,12 @@ function spec.run
     # Make sure to run after_each even if a test fails.
     spec.eval after_each $output
   end
+
   spec.eval after_all $output
+
+  if [ -z "$test_names" ]
+    echo 'No tests found.'
+  end
 
   return $result
 end
