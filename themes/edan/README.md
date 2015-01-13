@@ -2,7 +2,7 @@
 
 Inspired by idan, a functional, uncluttered fish theme with usability perks for git users and python developers.
 
-![Screenshot of edan theme](https://cloud.githubusercontent.com/assets/215282/2869575/7bd3f828-d278-11e3-91ce-7ff84a5ea1b0.png)
+![Screenshot of edan theme](https://raw.githubusercontent.com/amio/oh-my-fish/theme-edan-update/themes/edan/Screenshot.png)
 
 
 #### Characteristics
