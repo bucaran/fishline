@@ -1,4 +1,4 @@
-# name: iden
+# name: edan
 # Display the following bits on the left:
 # * Virtualenv name (if applicable, see https://github.com/adambrenecki/virtualfish)
 # * Current directory name
@@ -12,8 +12,17 @@ function _is_git_dirty
   echo (command git status -s --ignore-submodules=dirty ^/dev/null)
 end
 
+function _user_host
+  if [ (id -u) = "0" ];
+    echo -n (set_color -o red)
+  else
+    echo -n (set_color -o blue)
+  end
+  echo -n $USER°(hostname|cut -d . -f 1) (set color normal)
+end
+
 function fish_prompt
-  set fish_greeting ""
+  set fish_greeting
   set -l cyan (set_color -o cyan)
   set -l yellow (set_color -o yellow)
   set -l red (set_color -o red)
@@ -32,6 +41,8 @@ function fish_prompt
   if set -q VIRTUAL_ENV
       echo -n -s (set_color -b cyan black) '[' (basename "$VIRTUAL_ENV") ']' $normal ' '
   end
+
+  _user_host; echo -n ': '
 
   # Display the current directory name
   echo -n -s $cwd $normal
@@ -52,4 +63,22 @@ function fish_prompt
   # Terminate with a nice prompt char
   echo -n -s ' » ' $normal
 
+end
+
+# Display the compressed current working path on the right
+# If the previous command returned any kind of error code, display that too
+
+function fish_right_prompt
+  set -l last_status $status
+  set -l cyan (set_color -o cyan)
+  set -l red (set_color -o red)
+  set -l normal (set_color normal)
+
+  echo -n -s $cyan (prompt_pwd)
+
+  if test $last_status -ne 0
+    set_color red
+    printf ' %d' $last_status
+    set_color normal
+  end
 end

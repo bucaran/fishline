@@ -1,4 +1,4 @@
-## edan
+## Theme Edan
 
 Inspired by idan, a functional, uncluttered fish theme with usability perks for git users and python developers.
 
@@ -9,6 +9,7 @@ Inspired by idan, a functional, uncluttered fish theme with usability perks for 
 
 ##### Left Prompt
 
+* User & host
 * Current python virtualenv (if applicable)
 * Truncated CWD (just the current folder name)
 * Git branch and dirty state (if applicable)
