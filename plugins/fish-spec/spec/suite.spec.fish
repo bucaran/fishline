@@ -32,6 +32,7 @@ function describe_suite_run -d 'Testing a suite run'
 
     expect (run_nested_suite $suite) --to-contain 'first describe' 'second describe'
     functions -e 'describe_blank_suite'
+    functions -e 'describe_another_blank_suite'
   end
 
   function it_runs_all_it_blocks
@@ -53,6 +54,51 @@ function describe_suite_run -d 'Testing a suite run'
 
     expect (run_nested_suite $suite) --to-contain 'first test' 'second test'
     functions -e 'describe_suite'
+    functions -e 'it_is_executed'
+    functions -e 'it_is_also_executed'
+  end
+
+  function it_adds_a_dot_for_a_successful_expectation
+    set -l suite "
+        import plugins/fish-spec
+
+        function describe_suite
+          function it_is_executed
+            expect 'success' --to-equal 'success'
+          end
+        end
+
+        spec.run
+      "
+
+    set -l output (run_nested_suite $suite)
+    set -l dot    (echo -ne (set_color green).(set_color white))
+
+    expect (echo $output) --to-equal $dot
+    functions -e 'describe_suite'
+    functions -e 'it_is_executed'
+  end
+
+  function it_adds_a_dot_for_each_successful_expectation
+    set -l suite "
+        import plugins/fish-spec
+
+        function describe_suite
+          function it_is_executed
+            expect 'success' --to-equal 'success'
+            expect 'success' --to-equal 'success'
+          end
+        end
+
+        spec.run
+      "
+
+    set -l output (run_nested_suite $suite)
+    set -l dot    (echo -ne (set_color green).(set_color white))
+
+    expect (echo $output) --to-equal $dot$dot
+    functions -e 'describe_suite'
+    functions -e 'it_is_executed'
   end
 end
 
