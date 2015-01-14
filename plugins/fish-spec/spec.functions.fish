@@ -1,6 +1,6 @@
 # NAME
-#   spec.functions - echo functions existing in the global scope that match
-#                    the key glob.
+#   spec.functions - retrieve functions in the global scope that match ^key
+#
 # SYNOPSIS
 #   spec.functions <key>
 #

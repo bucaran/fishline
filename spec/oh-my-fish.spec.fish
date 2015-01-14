@@ -14,7 +14,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_has_a_default_custom_directory \
-    -d "It should have a default custom directory"
+    -d "It have a default custom directory"
 
     set -e fish_custom
     load_oh_my_fish
@@ -22,7 +22,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_allows_the_custom_folder_location_to_be_customized \
-    -d "It should allow modifying the location of the custom directory"
+    -d "It allow modifying the location of the custom directory"
 
     set -g fish_custom /tmp
     load_oh_my_fish
@@ -30,7 +30,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_loads_all_custom_files \
-    -d "It should load all custom files"
+    -d "It loads all custom files"
 
     set -g fish_custom /tmp
     echo 'set -gx TEST_LOAD_CUSTOM_FILE file_loaded' > $fish_custom/test.load
@@ -40,7 +40,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_loads_all_oh_my_fish_functions \
-    -d "It should load all default functions"
+    -d "It loads all default functions"
 
     list.erase "$fish_path/functions/" --from fish_function_path
 
@@ -49,7 +49,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_loads_all_selected_plugins \
-    -d "It should load all user selected plugins"
+    -d "It loads all user selected plugins"
 
     list.erase "$fish_path/plugins/bak" \
                "$fish_path/plugins/z" --from fish_function_path
@@ -61,7 +61,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_loads_the_selected_theme \
-    -d "It should load the user selected theme"
+    -d "It loads the user selected theme"
 
     list.erase "$fish_path/themes/l" --from fish_function_path
 
@@ -71,7 +71,7 @@ function describe_oh_my_fish -d "Oh-My-Fish test spec..."
   end
 
   function it_reloads_with_status_of_0 \
-    -d "It should reload the framework with \$status of 0"
+    -d "It reloads the framework with \$status of 0"
 
     load_oh_my_fish
     expect $status --to-equal 0
