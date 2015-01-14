@@ -12,7 +12,6 @@ function describe_suite_run -d 'Testing a suite run'
       "
 
     expect (run_nested_suite $suite) --to-equal 'No tests found.'
-    functions -e 'describe_blank_suite'
   end
 
   function it_runs_all_describe_blocks
@@ -31,8 +30,6 @@ function describe_suite_run -d 'Testing a suite run'
       "
 
     expect (run_nested_suite $suite) --to-contain 'first describe' 'second describe'
-    functions -e 'describe_blank_suite'
-    functions -e 'describe_another_blank_suite'
   end
 
   function it_runs_all_it_blocks
@@ -53,9 +50,6 @@ function describe_suite_run -d 'Testing a suite run'
       "
 
     expect (run_nested_suite $suite) --to-contain 'first test' 'second test'
-    functions -e 'describe_suite'
-    functions -e 'it_is_executed'
-    functions -e 'it_is_also_executed'
   end
 
   function it_adds_a_dot_for_a_successful_expectation
@@ -75,8 +69,6 @@ function describe_suite_run -d 'Testing a suite run'
     set -l dot    (echo -ne (set_color green).(set_color white))
 
     expect (echo $output) --to-equal $dot
-    functions -e 'describe_suite'
-    functions -e 'it_is_executed'
   end
 
   function it_adds_a_dot_for_each_successful_expectation
@@ -97,21 +89,31 @@ function describe_suite_run -d 'Testing a suite run'
     set -l dot    (echo -ne (set_color green).(set_color white))
 
     expect (echo $output) --to-equal $dot$dot
-    functions -e 'describe_suite'
-    functions -e 'it_is_executed'
   end
 end
 
 function run_nested_suite -a suite
+  set -g original_function_names (functions -n)
+
+  # Backup original suite functions
   for function_name in (functions -n | grep -E "it_|describe_")
     functions -c $function_name "backup.$function_name"
     functions -e $function_name
   end
 
+  # Run nested suite
   eval $suite
 
+  # Restore original suite functions
   for function_name in (functions -n | grep -E "backup.")
     functions -c $function_name (echo $function_name | sed -e 's/backup.//g')
+    functions -e $function_name
+  end
+
+  # Remove functions created by the nested suite
+  set function_names (functions -n)
+  list.erase $original_function_names --from function_names
+  for function_name in $function_names
     functions -e $function_name
   end
 end
