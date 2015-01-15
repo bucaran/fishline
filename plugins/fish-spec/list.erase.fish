@@ -13,9 +13,12 @@
 #   While items are basically any valid sequence of symbols, lists refer
 #   to any global variable or local variable in the scope of the calling
 #   function by name.
+#
+# AUTHORS
+#   Jorge Bucaran <@bucaran>
 #/
 function -S list.erase
-  # Assume no items were erased from any lists.
+  # Assume no items were erased.
   set -l result 1
   # At least one list should be at the last index.
   set -l items $argv[1..-2]

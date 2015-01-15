@@ -1,4 +1,4 @@
-import plugins/fish-specs
+import plugins/fish-spec
 
 function describe_oh_my_fish -d "Oh-My-Fish"
   function before_all
@@ -13,25 +13,20 @@ function describe_oh_my_fish -d "Oh-My-Fish"
     set fish_function_path  $fish_function_path_bak
   end
 
-  function it_has_a_default_custom_directory \
-    -d "has a default custom directory"
-
+  function it_has_a_default_custom_directory
     set -e fish_custom
     load_oh_my_fish
     expect $fish_custom --to-eq "$HOME/.oh-my-fish/custom"
+    expect $fish_custom --to-eq "$HOME/.oh-my-fish/custom"
   end
 
-  function it_allows_the_custom_folder_location_to_be_customized \
-    -d "allows modifying the location of the custom directory"
-
+  function it_allows_the_custom_folder_location_to_be_customized
     set -g fish_custom /tmp
     load_oh_my_fish
-    expect $fish_custom --to-eq '/tmp'
+    expect $fish_custom --to-equal '/tmp'
   end
 
-  function it_loads_all_custom_files \
-    -d "loads all custom files"
-
+  function it_loads_all_custom_files
     set -g fish_custom /tmp
     echo 'set -gx TEST_LOAD_CUSTOM_FILE file_loaded' > $fish_custom/test.load
 
@@ -39,18 +34,14 @@ function describe_oh_my_fish -d "Oh-My-Fish"
     expect $TEST_LOAD_CUSTOM_FILE --to-eq 'file_loaded'
   end
 
-  function it_loads_all_oh_my_fish_functions \
-    -d "loads all default functions"
-
+  function it_loads_all_oh_my_fish_functions
     list.erase "$fish_path/functions/" --from fish_function_path
 
     load_oh_my_fish
     expect $fish_function_path --to-contain $fish_path/functions/
   end
 
-  function it_loads_all_selected_plugins \
-    -d "loads all user selected plugins"
-
+  function it_loads_all_selected_plugins
     list.erase "$fish_path/plugins/bak" \
                "$fish_path/plugins/z" --from fish_function_path
 
@@ -60,7 +51,7 @@ function describe_oh_my_fish -d "Oh-My-Fish"
     expect $fish_function_path --to-contain $fish_path/plugins/z
   end
 
-  function it_loads_the_selected_theme -d "loads the user selected theme"
+  function it_loads_the_selected_theme
     list.erase "$fish_path/themes/l" --from fish_function_path
 
     set fish_theme l
@@ -68,9 +59,7 @@ function describe_oh_my_fish -d "Oh-My-Fish"
     expect $fish_function_path --to-contain $fish_path/themes/l
   end
 
-  function it_reloads_with_status_of_0 \
-    -d "reloads the framework with \$status of 0"
-    echo original
+  function it_reloads_with_status_of_0
     load_oh_my_fish
     expect $status --to-equal 0
   end
