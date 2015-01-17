@@ -6,4 +6,4 @@ env:
 before_install:
   - script/bootstrap.sh
 
-script: script/run-tests.fish
+script: script/run-tests.fish -v
