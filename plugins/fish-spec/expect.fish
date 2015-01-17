@@ -1,13 +1,20 @@
 # NAME
-#   expect - assert a list of expected values match an actual value.
+#   expect - assert a list of expected values match an actual value
 #
 # SYNOPSIS
-#   expect <expected>...
-#          <condition>
-#            --to-equal         <actual> value equals <expected> value
-#            --to-contain       <actual> value exists in <expected> list
-#            --to-no-contain    <actual> value does not exist in <expected> list
-#          <actual>
+#   expect <expected> <condition> <actual>
+
+# OPTIONS
+#   <expected>...
+#   <condition>
+#     --to-equal         <actual> value equals <expected> value
+#     --to-not-equal     <actual> value does not equals <expected> value
+#
+#     --to-contain       <actual> values exist in <expected> list
+#     --to-not-contain   <actual> values does not exist in <expected> list
+#     --to-be-true       exit status should be truthy
+#     --to-be-false      exit status should be falsy
+#   <actual>...
 #
 # EXAMPLE
 #   import plugins/fish-spec
@@ -19,30 +26,67 @@
 #     end
 #   end
 #   spec.run
+#
+# AUTHORS
+#   Bruno Pinto <@pfbruno>
+#   Jorge Bucaran <@bucaran>
 #/
 function expect
-  set -l expected  $argv[1..-3]
-  set -l condition $argv[-2]
-  set -l actual    $argv[-1]
-  set -l result    0
-  # Test conditions and save success/fail $status to return later.
-  switch $condition
-    case --to-eq\*
-      test "$expected" = "$actual"
-    case --to-contain
-      set actual_text "To contain"
-      contains -- "$actual" $expected
-    case --to-not-contain
-      set actual_text "To not contain"
-      not contains -- "$actual" $expected
+  set -l result 0
+  # Parse expected / actual lists
+  set -l actual    ""
+  set -l expected  ""
+  set -l condition ""
+
+  for index in (seq (count $argv))
+    switch $argv[$index]
+      # --condition found, split expected/actual lists
+      case --\*
+        set expected  $argv[1..(math $index-1)]
+        set condition $argv[$index]
+        # No comparison required e.g. --to-be-true
+        if [ $index -lt (count $argv) ]
+          set actual $argv[(math $index+1)..-1]
+        end
+        break
+    end
   end
+
+  # Test conditions
+  switch $condition
+    case --to-be-false
+      eval "$expected"
+      test $status -ne 0
+    case --to-be-true
+      eval "$expected"
+      test $status -eq 0
+    case --to-contain
+      set result 0
+      for item in $actual
+        contains -- "$item" $expected
+          or set result $status
+      end
+      test $result -eq 0
+    case --to-not-contain
+      set result 0
+      for item in $actual
+        contains -- "$item" $expected
+          or set result $status
+      end
+      test $result -ne 0
+    case --to-equal
+      test "$expected" = "$actual"
+    case --to-not-equal
+      test "$expected" != "$actual"
+  end
+
   set result $status
   if [ $result -eq 0 ]
-    spec.log --ok
+    # Return a non-empty string to indicate success.
+    printf "$result"
   else
-    spec.log --fail red \n"Expected" yellow "$expected" \
-                    red \n(echo $condition | tr "-" " " \
-                                           | cut -c 3-) yellow "$actual"
+    # Return error information separated by \t and tested condition.
+    printf "%s\n" $expected \t $condition $actual
   end
   return $result
 end
