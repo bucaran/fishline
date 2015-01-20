@@ -30,7 +30,7 @@ function _user_host
 end
 
 function fish_prompt
-  set fish_greeting ''
+  set fish_greeting
   set -l cyan (set_color -o cyan)
   set -l yellow (set_color -o yellow)
   set -l red (set_color -o red)
