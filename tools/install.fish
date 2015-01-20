@@ -16,8 +16,10 @@
 # The installation process is split up in the following steps:
 #
 #   1. Resolve source repository to default or get from environment variable.
-#      This allows installers curl -L ..install.fish | TRAVIS_REPO_SLUG=<fork> fish in
+#      This allows installers curl -L ..install.fish | REPO_SLUG=<fork> fish in
 #      order to test forks of the framework.
+#
+#      You can also specify the branch to pull from via REPO_BRANCH=<branch>
 #
 #   2. Check for already installed copies of Oh-My-Fish. Do not reinstall.
 #
@@ -44,8 +46,12 @@ end
 log white "Installing Oh My Fish..."
 
 # Allow installers to specify the source repository.
-if not set -q TRAVIS_REPO_SLUG
-  set TRAVIS_REPO_SLUG bpinto/oh-my-fish
+if not set -q REPO_SLUG
+  set REPO_SLUG bpinto/oh-my-fish
+end
+
+if not set -q REPO_BRANCH
+  set REPO_BRANCH master
 end
 
 # Abort installation if oh-my-fish is already installed.
@@ -58,12 +64,20 @@ end
 # Either git clone or curl GET repository.
 log blue "Cloning Oh My Fish from remote repository..."
 if type git >/dev/null
-  git clone "https://github.com/$TRAVIS_REPO_SLUG.git" $fish_path
+
+  set -l clone clone https://github.com/$REPO_SLUG.git
+
+  # If the branch is not master, pull from specified branch instead.
+  if [ $REPO_BRANCH != master ]
+    set clone $clone -b $REPO_BRANCH --single-branch
+  end
+
+  git $clone $fish_path
 else
   log yellow "Install git to pull Oh-My-Fish updates"
   log white "Downloading remote zip from Github..."
 
-  if curl -sLo $fish_path.zip "https://github.com/$TRAVIS_REPO_SLUG/archive/master.zip"
+  if curl -sLo $fish_path.zip "https://github.com/$REPO_SLUG/archive/master.zip"
     unzip -q $fish_path.zip
     mv "oh-my-fish-master" $fish_path
       and log green "Oh-My-Fish succesfully downloaded and extracted to $fish_path"

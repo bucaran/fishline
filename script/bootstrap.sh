@@ -9,4 +9,4 @@ else
   brew install fish $BREW_OPTIONS
 fi
 
-curl -L https://github.com/$TRAVIS_REPO_SLUG/raw/$TRAVIS_BRANCH/tools/install.fish | fish
+curl -L https://github.com/$TRAVIS_REPO_SLUG/raw/$TRAVIS_BRANCH/tools/install.fish | REPO_SLUG=$TRAVIS_REPO_SLUG fish
