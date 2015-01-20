@@ -1,8 +1,16 @@
-# name: edan
+# fish theme: edan
 # Display the following bits on the left:
 # * Virtualenv name (if applicable, see https://github.com/adambrenecki/virtualfish)
 # * Current directory name
 # * Git branch and dirty state (if inside a git repo)
+
+function edan-remote
+  set -U EDAN_HOST_TYPE 'remote'
+end
+
+function edan-local
+  set -eU EDAN_HOST_TYPE
+end
 
 function _git_branch_name
   echo (command git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
@@ -22,7 +30,7 @@ function _user_host
 end
 
 function fish_prompt
-  set fish_greeting
+  set fish_greeting ''
   set -l cyan (set_color -o cyan)
   set -l yellow (set_color -o yellow)
   set -l red (set_color -o red)
@@ -39,10 +47,13 @@ function fish_prompt
 
   # Display [venvname] if in a virtualenv
   if set -q VIRTUAL_ENV
-      echo -n -s (set_color -b cyan black) '[' (basename "$VIRTUAL_ENV") ']' $normal ' '
+    echo -n -s (set_color -b cyan black) '[' (basename "$VIRTUAL_ENV") ']' $normal ' '
   end
 
-  _user_host; echo -n ': '
+  # Display [user & host] when on remote host
+  if [ "$EDAN_HOST_TYPE" = "remote" ]
+    _user_host; echo -n ': '
+  end
 
   # Display the current directory name
   echo -n -s $cwd $normal
@@ -63,22 +74,4 @@ function fish_prompt
   # Terminate with a nice prompt char
   echo -n -s ' » ' $normal
 
-end
-
-# Display the compressed current working path on the right
-# If the previous command returned any kind of error code, display that too
-
-function fish_right_prompt
-  set -l last_status $status
-  set -l cyan (set_color -o cyan)
-  set -l red (set_color -o red)
-  set -l normal (set_color normal)
-
-  echo -n -s $cyan (prompt_pwd)
-
-  if test $last_status -ne 0
-    set_color red
-    printf ' %d' $last_status
-    set_color normal
-  end
 end
