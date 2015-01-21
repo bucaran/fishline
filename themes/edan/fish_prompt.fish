@@ -1,16 +1,9 @@
 # fish theme: edan
 # Display the following bits on the left:
+# * User & host (hidden by default, excute `edan-remote`to show, `edan-local` to hide)
 # * Virtualenv name (if applicable, see https://github.com/adambrenecki/virtualfish)
 # * Current directory name
 # * Git branch and dirty state (if inside a git repo)
-
-function edan-remote
-  set -U EDAN_HOST_TYPE 'remote'
-end
-
-function edan-local
-  set -eU EDAN_HOST_TYPE
-end
 
 function _git_branch_name
   echo (command git symbolic-ref HEAD ^/dev/null | sed -e 's|^refs/heads/||')
