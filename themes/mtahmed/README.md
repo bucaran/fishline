@@ -2,7 +2,7 @@
 
 Minimal theme.
 
-![mtahmed theme](https://imgur.com/oq5P4CT)
+![mtahmed theme](http://i.imgur.com/oq5P4CT.png)
 
 #### Left prompt
 
