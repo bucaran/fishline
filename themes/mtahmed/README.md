@@ -2,7 +2,7 @@
 
 Minimal theme.
 
-![mtahmed theme](http://csclub.uwaterloo.ca/~mtahmed/media/images/fish.png)
+![mtahmed theme](http://i.imgur.com/oq5P4CT.png)
 
 #### Left prompt
 
