@@ -1,0 +1,3 @@
+[submodule "themes/fishline/fishline"]
+	path = themes/fishline/fishline
+	url = https://github.com/0rax/fishline
