@@ -44,11 +44,15 @@ function fish_prompt
   __current_path
   __git_status
   echo -e ''
-   if [ (_git_branch_name) ]
-   echo (set_color white)"╰─"(set_color --bold green)" ><(((\"> "(set_color normal)
+  echo -n (set_color white)"╰─"
+  
+  if [ (_git_branch_name) ]
+    echo -n (set_color --bold green) 
   else
-    echo (set_color white)"╰─"(set_color --bold blue)" ><(((\"> "(set_color normal)
+    echo -n (set_color --bold blue)
   end
+  
+  echo " ><(((\"> "(set_color normal)
 end
 
 function fish_right_prompt
