@@ -57,7 +57,7 @@ We are hoping to collect a bunch of themes for our command prompts. You can see 
 
 1. Clone the repository
 ```fish
-git clone git://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
+git clone --recursive git://github.com/bpinto/oh-my-fish.git ~/.oh-my-fish
 ```
 
 2. Create a new fish config by copying the fish template we've provided.
