@@ -4,6 +4,7 @@
 * [__better-alias__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/better-alias) - Provide alias with auto completion.
 * [__brew__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/brew) – [Homebrew](http://brew.sh/) integration.
 * [__bundler__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/bundler) – Use Ruby's [Bundler](http://bundler.io/) automatically for some commands.
+* [__cal__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/cal) – Highlight the current day in cal output.
 * [__ccache__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/ccache) – Enable [ccache](http://ccache.samba.org/) to speed up compilation.
 * [__django__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/django) – Helper for Django Unit tests. Cleans the cached modules as well.
 * [__ec2__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/ec2) – Exports env variables for Amazon's EC2 management.
