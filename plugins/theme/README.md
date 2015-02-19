@@ -1,4 +1,4 @@
-## _theme_ :point_left:
+## _theme_ :tophat:
 > Quick theme switcher.
 
 ## Description
@@ -35,4 +35,4 @@ Quick theme switcher for _Oh my fish_. _theme_ is smart to auto-complete as you 
 
 ## License
 
-MIT :sunglasses:
+MIT
