@@ -12,7 +12,7 @@
 * [__fish-spec__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/fish-spec) - Unit testing as simple as fish. See the [README](fish-spec/README.markdown) for usage instructions.
 * [__fry__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/fry) – Starts [fry](https://github.com/terlar/fry), a simple Ruby version manager for fish.
 * [__gem__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/gem) – Ruby gem integration.
-* [__getopts__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/getopts) [(issues)](https://github.com/bucaran/getopts) - A [Unix compliant](http://pubs.opengroup.org/onlinepubs/7908799/xbd/utilconv.html) implementation of [`getopts`](http://en.wikipedia.org/wiki/Getopts) for fish. 
+* [__getopts__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/getopts) [(issues)](https://github.com/bucaran/getopts) - A [Unix compliant](http://pubs.opengroup.org/onlinepubs/7908799/xbd/utilconv.html) implementation of [`getopts`](http://en.wikipedia.org/wiki/Getopts) for fish.
 * [__gi__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/gi) – [gitignore.io](http://gitignore.io) CLI for fish.
 * [__git-flow__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/git-flow) – [git-flow](https://github.com/nvie/gitflow) Completion support for git-flow.
 * [__jump__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/jump) – A port of [Jeroen Janssens’ “jump” utility](http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html).
@@ -22,6 +22,7 @@
 * [__msg__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/msg) - A technicolor message printer. A colorful alternative to echo.
 * [__ndenv__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/ndenv) – Helpers for [another node.js version manager](https://github.com/riywo/ndenv).
 * [__node__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/node) – Adds locally installed NodeJS `npm` binary executable modules to the path.
+* [__pbcopy__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/pbcopy) – OSX's pbcopy and pbpaste for Linux.
 * [__percol__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/percol) – Browse your fish history with [percol](https://github.com/mooz/percol).
 * [__peco__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/peco) – Browse your fish history with [peco](https://github.com/peco/peco).
 * [__osx__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/osx) - Integration with Finder and iTunes.
@@ -35,6 +36,9 @@
 * [__rvm__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/rvm) – [RVM](http://rvm.io) Ruby version manager.
 * [__ssh__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/ssh) – ssh conservative $TERM value helper.
 * [__sublime__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/sublime) – Creates `subl` command line shortcut to launch [Sublime Text editor](http://sublimetext.com/).
+* [__tab__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/tab) – Open the current directory (or any other directory) in a new tab.
+* [__theme__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/theme) – Quick theme switcher.
+* [__tiny__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/tiny) - tap into github's git.io URL shortener.
 * [__tmux__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/tmux) – Plugin to start tmux with support for 256 colours.
 * [__vi-mode__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/vi-mode) – Basic vi key bindings emulation for fish.
 * [__xdg__](https://github.com/bpinto/oh-my-fish/tree/master/plugins/xdg) – Setup [xdg](http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) environment on Linux.
