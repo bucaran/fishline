@@ -1,0 +1,20 @@
+function __emacs_version
+  test -n "$argv"
+  and echo (eval $argv --version | grep -o "[0-9]\+.[0-9]\+.[0-9]\+.[0-9]\+" | sed  "s/\..*//")
+end
+
+# imagine that $emacs and $emacs_version are passed in as arguments to emacs.load
+set -q emacs; or set emacs (which emacs)
+set -q emacs_version; or set -g emacs_version (__emacs_version $emacs)
+
+test -n "$emacs_version"; and test $emacs_version -gt 23
+and begin
+  set -q EDITOR; or set -gx EDITOR emacs
+
+  set -l emacs_plugin_path (cd (dirname $argv); pwd)
+  set fish_function_path $emacs_plugin_path/functions $fish_function_path
+end
+
+set -e emacs
+set -e emacs_version
+functions -e __emacs_version
