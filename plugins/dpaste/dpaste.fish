@@ -26,6 +26,8 @@ function __dpaste_set_defaults
   set -g __dpaste_send_url (eval 'echo $__dpaste_url_'$suffix)
   set -q __dpaste_send_url; or set -g __dpaste_send_url $__dpaste_url_dpaste_de
   set -g __dpaste_eat_once 0
+
+  set -q __dpaste_editor; or set -g __dpaste_editor (readlink (which editor))
 end
 
 function __dpaste_send
@@ -33,11 +35,14 @@ function __dpaste_send
     command curl --silent $argv
   end
 
-  curl -F "$__dpaste_keyword=<-" $__dpaste_send_url | read -l url
-  if [ $__dpaste_eat_once = 1 ]
-    curl $url >/dev/null
+  if curl -F "$__dpaste_keyword=<-" $__dpaste_send_url | read -l url
+    if [ $__dpaste_eat_once = 1 ]
+      curl $url >/dev/null
+    end
+    echo $url
+  else
+    return $status
   end
-  echo $url
 end
 
 function __dpaste_parse_expires
@@ -61,6 +66,7 @@ function __dpaste_help
 
 Options:
   -t EXPIRES  set snippet expiration time: $__dpaste_expires_choises [default: month]
+  -i          create a temporary file, and run `$__dpaste_editor` on it, uploading and deleting the temporary file on completion
 
 Configuration:
   You can use this plugin with other dpaste instances.
@@ -82,14 +88,35 @@ function __dpaste_parse_help
   and __dpaste_help
 end
 
+function --no-scope-shadowing  __dpaste_parse_editor
+  begin # prevent setting of $index in parent do to --no-scope-shadowing to capture parent $argv reference instead of value
+    if set -l index (contains -i -- -i $argv)
+      set -e argv[$index]
+      return 0
+    else
+      return 1
+    end
+  end
+end
+
+
 function dpaste
+  set -l dpaste_tempfile
   __dpaste_set_defaults
   __dpaste_parse_help $argv
   or begin
     set argv (__dpaste_parse_expires $argv)
     if isatty
       if [ -n $argv ]
-        if [ -f $argv ]
+        if __dpaste_parse_editor $argv # This deletes the -e from argv
+          if set dpaste_tempfile (mktemp dpaste_interactive.XXXXX)
+            eval $__dpaste_editor $dpaste_tempfile
+            cat $dpaste_tempfile
+          else
+            echo "Could not create temporary file"
+            return $status
+          end
+        else if [ -f $argv ]
           cat $argv
         else
           echo $argv
@@ -100,5 +127,20 @@ function dpaste
     else
       __dpaste_send
     end
+    set -l dpaste_return_status $status
+    
+    # Only delete tempfile if dpaste complete successfuly 
+    if [ "x$dpaste_tempfile" != "x" ]
+      if [ -f $dpaste_tempfile -a "x$dpaste_return_status" = "x0" ] 
+        rm $dpaste_tempfile ^ /dev/null; or echo "Warning: could not remove tempfile"
+      else if [ -f $dpaste_tempfile ]
+        echo "upload failed ($dpaste_return_status), temporary file saved to `$dpaste_tempfile`"
+      end
+    else if [ "x$dpaste_return_status" != "x0" ]
+      echo ++none
+      echo "upload failed ($dpaste_return_status)"
+    end
+
+    return $dpaste_return_status
   end
 end
