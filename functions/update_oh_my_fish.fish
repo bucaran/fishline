@@ -30,6 +30,9 @@ cd $fish_path
 
 if [ -d .git ]
 
+	# debug log
+	log yellow "To update through git."
+
   if [ ( _is_git_touched ) ]
 
     echo "Error: Your local changes would be overwritten by update.
@@ -52,16 +55,29 @@ if [ -d .git ]
 
 else
 
+	# debug log
+	log yellow "To update throught zip."
+
   find . -maxdepth 1 -not -name 'custom' | xargs rm -rf ^/dev/null
 
   log blue "Downloading remote zip from Github..."
 
   if curl -Lo $omf_temp_zip "https://github.com/$TRAVIS_REPO_SLUG/archive/master.zip"
 
-    unzip -uo $omf_temp_zip -d $omf_temp_dir >/dev/null
+    #debug log
+		log yellow "To unzip files to $omf_temp_dir"
+		unzip -uo $omf_temp_zip -d $omf_temp_dir >/dev/null
+
+
+		#debug log
+		log yellow "To copy files to $fish_path"
     cd $omf_temp_dir/oh-my-fish-master
     cp -R * $fish_path
       and log green "Oh-My-Fish succesfully downloaded and extracted to $fish_path"
+
+
+    #debug log
+		log yellow "To clean files in $omf_temp_dir"
     rm -rf $omf_temp_zip $omf_temp_dir
 
   else
