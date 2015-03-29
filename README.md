@@ -1,3 +1,5 @@
+![logo](https://cloud.githubusercontent.com/assets/958723/6883634/45958986-d595-11e4-8f90-2ae84c35e2bc.png "Oh My Fish logo")
+
 # Oh My Fish!
 
 [![Build Status](https://travis-ci.org/bpinto/oh-my-fish.svg?branch=master)](https://travis-ci.org/bpinto/oh-my-fish)
