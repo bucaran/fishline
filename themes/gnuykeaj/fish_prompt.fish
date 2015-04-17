@@ -1,6 +1,6 @@
 # name: gnuykeaj
 # ---------------
-# Based on cleaance, which is based off idan. 
+# Based on clearance, which is based off idan. 
 # 1 line minimal, beautiful version of clearance.
 # Display the following bits on the left:
 # - Virtualenv name (if applicable, see https://github.com/adambrenecki/virtualfish)
