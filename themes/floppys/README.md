@@ -2,7 +2,7 @@
 
 Only usefull feature, according to me, in a compact fashion
 
-![Screenshot](http://www.labri.fr/~fmoranda/dist/floppys.png)
+![Screenshot](https://cloud.githubusercontent.com/assets/1183726/7451201/4fa49720-f24e-11e4-80a8-6e7a7f3120ab.png)
 
 For this theme you need a emoji supporting terminal and the emoji-clock plugin
 
