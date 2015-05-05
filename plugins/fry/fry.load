@@ -1,4 +1,6 @@
 ### Main program
-if test -d /usr/local/share/fry/fry.fish
+if test -f /usr/local/share/fry/fry.fish
   . /usr/local/share/fry/fry.fish
+else if test -f /usr/share/fish/fry.fish
+  . /usr/share/fish/fry.fish
 end
