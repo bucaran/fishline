@@ -40,5 +40,5 @@ function fish_right_prompt
     echo -n -s $cyan "[⚙]"
   end
   # Show date
-  echo -n -s $pink '[' $dark_pink (date +%H:%M:%S) $pink '] ' $normal
+  echo -n -s $pink '[' $dark_pink (date +%H:%M:%S) $pink ']' $normal
 end
