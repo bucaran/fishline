@@ -16,9 +16,9 @@ The philosophy behind dangerous theme:
 * Make histories quickly accessible with menus.
 * Don't stress your eyes. Use different colors in dark and bright environments.
 
-## Demonstration video
+## Screenshot
 
-[![video][screenshot]](http://vimeo.com/105546618)
+![screenshot][screenshot]
 
 ## Requirements
 

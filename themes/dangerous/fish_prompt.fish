@@ -175,12 +175,12 @@ function d -d 'List directory history, jump to directory in list with d <number>
   end
   echo -en $dangerous_cursors[2]
   set input_length (expr length (expr $num_items - 1))
-  read -p 'echo -n (set_color $dangerous_colors[5])" ♻ Goto [e|0"$last_item"] ❯ "' -n $input_length -l dir_num
+  read -p 'echo -n (set_color $dangerous_colors[5])"♻ Goto [e|0"$last_item"] ❯ "' -n $input_length -l dir_num
   switch $dir_num
     case (seq 0 (expr $num_items - 1))
       cd $$dir_hist[1][(expr $num_items - $dir_num)]
     case 'e'
-      read -p 'echo -n (set_color $dangerous_colors[5])" ♻ Erase [0"$last_item"] ❯ "' -n $input_length -l dir_num
+      read -p 'echo -n (set_color $dangerous_colors[5])"♻ Erase [0"$last_item"] ❯ "' -n $input_length -l dir_num
       set -e $dir_hist[1][(expr $num_items - $dir_num)] ^ /dev/null
       set dir_hist_val (count $$dir_hist)
       tput cuu1
@@ -250,7 +250,7 @@ function c -d 'List command history, load command from prompt with c <prompt num
   end
   echo -en $dangerous_cursors[4]
   set input_length (expr length (expr $num_items - 1))
-  read -p 'echo -n (set_color $dangerous_colors[9])" ↩ Exec [e|0"$last_item"] ❯ "' -n $input_length -l cmd_num
+  read -p 'echo -n (set_color $dangerous_colors[9])"↩ Exec [e|0"$last_item"] ❯ "' -n $input_length -l cmd_num
   switch $cmd_num
     case (seq 0 (expr $num_items - 1))
       commandline $$cmd_hist[1][(expr $num_items - $cmd_num)]
@@ -259,7 +259,7 @@ function c -d 'List command history, load command from prompt with c <prompt num
         tput cuu1
       end
     case 'e'
-      read -p 'echo -n (set_color $dangerous_colors[9])" ↩ Erase [0"$last_item"] ❯ "' -n $input_length -l cmd_num
+      read -p 'echo -n (set_color $dangerous_colors[9])"↩ Erase [0"$last_item"] ❯ "' -n $input_length -l cmd_num
       for i in (seq (count (echo $$cmd_hist\n)))
         tput cuu1
       end
@@ -317,7 +317,7 @@ function m -d 'List bookmarks, jump to directory in list with m <number>'
   end
   echo -en $dangerous_cursors[1]
   set input_length (expr length (expr $num_items - 1))
-  read -p 'echo -n (set_color $dangerous_colors[10])" ⌘ Goto [0"$last_item"] ❯ "' -n $input_length -l dir_num
+  read -p 'echo -n (set_color $dangerous_colors[10])"⌘ Goto [0"$last_item"] ❯ "' -n $input_length -l dir_num
   switch $dir_num
     case (seq 0 (expr $num_items - 1))
       cd $bookmarks[(expr $num_items - $dir_num)]
@@ -449,7 +449,7 @@ function s -d 'Create, delete or attach session'
     end
     echo -en $dangerous_cursors[3]
     set input_length (expr length (expr $num_items - 1))
-    read -p 'echo -n (set_color $dangerous_colors[8])" ✻ Attach [e|0"$last_item"] ❯ "' -n $input_length -l session_num
+    read -p 'echo -n (set_color $dangerous_colors[8])"✻ Attach [e|0"$last_item"] ❯ "' -n $input_length -l session_num
     set pcount (expr $pcount - 1)
     switch $session_num
       case (seq 0 (expr $num_items - 1))
@@ -460,7 +460,7 @@ function s -d 'Create, delete or attach session'
         tput ed
         tput cuu1
       case 'e'
-        read -p 'echo -n (set_color $dangerous_colors[8])" ✻ Erase [0"$last_item"] ❯ "' -n $input_length -l session_num
+        read -p 'echo -n (set_color $dangerous_colors[8])"✻ Erase [0"$last_item"] ❯ "' -n $input_length -l session_num
         if [ (expr $num_items - $session_num) -gt 0 ]
           __dangerous_erase_session -e $dangerous_sessions[(expr $num_items - $session_num)]
         end
@@ -580,133 +580,130 @@ end
 # => Symbols segment
 ####################
 function __dangerous_prompt_left_symbols -d 'Display symbols'
-    set_color $dangerous_colors[3]
-    echo -n '❯'
+    set -l symbols_urgent 'F'
+    set -l symbols (set_color $dangerous_colors[3])'❯'
 
-    switch $pwd_style
-        case short long
-            set -l jobs (jobs | wc -l)
-            if [ -e ~/.taskrc ]
-                set todo (task due.before:sunday ^ /dev/null | tail -1 | cut -f1 -d' ')
-                set overdue (task due.before:today ^ /dev/null | tail -1 | cut -f1 -d' ')
-            end
-            if [ -e ~/.reminders ]
-                set appointments (rem -a | cut -f1 -d' ')
-            end
-            if [ (count $todo) -eq 0 ]
-                set todo 0
-            end
-            if [ (count $overdue) -eq 0 ]
-                set overdue 0
-            end
-            if [ (count $appointments) -eq 0 ]
-                set appointments 0
-            end
-
-            if [ $symbols_style = 'symbols' ]
-                if [ $dangerous_session_current != '' ]
-                    set_color -o $dangerous_colors[8]
-                    echo -n ' ✻'
-                end
-                if contains $PWD $bookmarks
-                    set_color -o $dangerous_colors[10]
-                    echo -n ' ⌘'
-                end
-                if set -q -x VIM
-                    set_color -o $dangerous_colors[9]
-                    echo -n ' V'
-                end
-                if set -q -x RANGER_LEVEL
-                    set_color -o $dangerous_colors[9]
-                    echo -n ' R'
-                end
-                if [ $jobs -gt 0 ]
-                    set_color -o $dangerous_colors[11]
-                    echo -n ' ⚙'
-                end
-                if [ ! -w . ]
-                    set_color -o $dangerous_colors[6]
-                    echo -n ' '
-                end
-                if [ $todo -gt 0 ]
-                    set_color -o $dangerous_colors[4]
-                end
-                if [ $overdue -gt 0 ]
-                    set_color -o $dangerous_colors[8]
-                end
-                if [ (expr $todo + $overdue) -gt 0 ]
-                    echo -n ' ⚔'
-                end
-                if [ $appointments -gt 0 ]
-                    set_color -o $dangerous_colors[5]
-                    echo -n ' ⚑'
-                end
-                if [ $last_status -eq 0 ]
-                    set_color -o $dangerous_colors[12]
-                    echo -n ' ✔'
-                else
-                    set_color -o $dangerous_colors[7]
-                    echo -n ' ✘'
-                end
-                if [ $USER = 'root' ]
-                    set_color -o $dangerous_colors[6]
-                    echo -n ' ⚡'
-                end
-            else
-                if [ $dangerous_session_current != '' ] ^ /dev/null
-                    set_color $dangerous_colors[8]
-                    echo -n ' '(expr (count $dangerous_sessions) - (contains -i $dangerous_session_current $dangerous_sessions))
-                end
-                if contains $PWD $bookmarks
-                    set_color $dangerous_colors[10]
-                    echo -n ' '(expr (count $bookmarks) - (contains -i $PWD $bookmarks))
-                end
-                if set -q -x VIM
-                    set_color -o $dangerous_colors[9]
-                    echo -n ' V'
-                    set_color normal
-                end
-                if set -q -x RANGER_LEVEL
-                    set_color $dangerous_colors[9]
-                    echo -n ' '$RANGER_LEVEL
-                end
-                if [ $jobs -gt 0 ]
-                    set_color $dangerous_colors[11]
-                    echo -n ' '$jobs
-                end
-                if [ ! -w . ]
-                    set_color -o $dangerous_colors[6]
-                    echo -n ' '
-                    set_color normal
-                end
-                if [ $todo -gt 0 ]
-                    set_color $dangerous_colors[4]
-                end
-                if [ $overdue -gt 0 ]
-                    set_color $dangerous_colors[8]
-                end
-                if [ (expr $todo + $overdue) -gt 0 ]
-                    echo -n " $todo"
-                end
-                if [ $appointments -gt 0 ]
-                    set_color $dangerous_colors[5]
-                    echo -n " $appointments"
-                end
-                if [ $last_status -eq 0 ]
-                    set_color $dangerous_colors[12]
-                    echo -n ' '$last_status
-                else
-                    set_color $dangerous_colors[7]
-                    echo -n ' '$last_status
-                end
-                if [ $USER = 'root' ]
-                    set_color -o $dangerous_colors[6]
-                    echo -n ' ⚡'
-                end
-            end
-            set_color $dangerous_colors[3]
-            echo -n ' ❯'
+    set -l jobs (jobs | wc -l)
+    if [ -e ~/.taskrc ]
+        set todo (task due.before:sunday ^ /dev/null | tail -1 | cut -f1 -d' ')
+        set overdue (task due.before:today ^ /dev/null | tail -1 | cut -f1 -d' ')
     end
+    if [ -e ~/.reminders ]
+        set appointments (rem -a | cut -f1 -d' ')
+    end
+    if [ (count $todo) -eq 0 ]
+        set todo 0
+    end
+    if [ (count $overdue) -eq 0 ]
+        set overdue 0
+    end
+    if [ (count $appointments) -eq 0 ]
+        set appointments 0
+    end
+
+    if [ $symbols_style = 'symbols' ]
+        if [ $dangerous_session_current != '' ]
+            set symbols $symbols(set_color -o $dangerous_colors[8])' ✻'
+            set symbols_urgent 'T'
+        end
+        if contains $PWD $bookmarks
+            set symbols $symbols(set_color -o $dangerous_colors[10])' ⌘'
+        end
+        if set -q -x VIM
+            set symbols $symbols(set_color -o $dangerous_colors[9])' V'
+            set symbols_urgent 'T'
+        end
+        if set -q -x RANGER_LEVEL
+            set symbols $symbols(set_color -o $dangerous_colors[9])' R'
+            set symbols_urgent 'T'
+        end
+        if [ $jobs -gt 0 ]
+            set symbols $symbols(set_color -o $dangerous_colors[11])' ⚙'
+            set symbols_urgent 'T'
+        end
+        if [ ! -w . ]
+            set symbols $symbols(set_color -o $dangerous_colors[6])' '
+        end
+        if [ $todo -gt 0 ]
+            set symbols $symbols(set_color -o $dangerous_colors[4])
+        end
+        if [ $overdue -gt 0 ]
+            set symbols $symbols(set_color -o $dangerous_colors[8])
+        end
+        if [ (expr $todo + $overdue) -gt 0 ]
+            set symbols $symbols' ⚔'
+            set symbols_urgent 'T'
+        end
+        if [ $appointments -gt 0 ]
+            set symbols $symbols(set_color -o $dangerous_colors[5])' ⚑'
+            set symbols_urgent 'T'
+        end
+        if [ $last_status -eq 0 ]
+            set symbols $symbols(set_color -o $dangerous_colors[12])' ✔'
+        else
+            set symbols $symbols(set_color -o $dangerous_colors[7])' ✘'
+        end
+        if [ $USER = 'root' ]
+            set symbols $symbols(set_color -o $dangerous_colors[6])' ⚡'
+            set symbols_urgent 'T'
+        end
+    else
+        if [ $dangerous_session_current != '' ] ^ /dev/null
+            set symbols $symbols(set_color $dangerous_colors[8])' '(expr (count $dangerous_sessions) - (contains -i $dangerous_session_current $dangerous_sessions))
+            set symbols_urgent 'T'
+        end
+        if contains $PWD $bookmarks
+            set symbols $symbols(set_color $dangerous_colors[10])' '(expr (count $bookmarks) - (contains -i $PWD $bookmarks))
+        end
+        if set -q -x VIM
+            set symbols $symbols(set_color -o $dangerous_colors[9])' V'(set_color normal)
+            set symbols_urgent 'T'
+        end
+        if set -q -x RANGER_LEVEL
+            set symbols $symbols(set_color $dangerous_colors[9])' '$RANGER_LEVEL
+            set symbols_urgent 'T'
+        end
+        if [ $jobs -gt 0 ]
+            set symbols $symbols(set_color $dangerous_colors[11])' '$jobs
+            set symbols_urgent 'T'
+        end
+        if [ ! -w . ]
+            set symbols $symbols(set_color -o $dangerous_colors[6])' '(set_color normal)
+        end
+        if [ $todo -gt 0 ]
+            set symbols $symbols(set_color $dangerous_colors[4])
+        end
+        if [ $overdue -gt 0 ]
+            set symbols $symbols(set_color $dangerous_colors[8])
+        end
+        if [ (expr $todo + $overdue) -gt 0 ]
+            set symbols $symbols" $todo"
+            set symbols_urgent 'T'
+        end
+        if [ $appointments -gt 0 ]
+            set symbols $symbols(set_color $dangerous_colors[5])" $appointments"
+            set symbols_urgent 'T'
+        end
+        if [ $last_status -eq 0 ]
+            set symbols $symbols(set_color $dangerous_colors[12])' '$last_status
+        else
+            set symbols $symbols(set_color $dangerous_colors[7])' '$last_status
+        end
+        if [ $USER = 'root' ]
+            set symbols $symbols(set_color -o $dangerous_colors[6])' ⚡'
+            set symbols_urgent 'T'
+        end
+    end
+    set symbols $symbols(set_color $dangerous_colors[3])' ❯'
+    switch $pwd_style
+        case none
+            if test $symbols_urgent = 'T'
+                set symbols (set_color $dangerous_colors[3])'❯'
+            else
+                set symbols ''
+            end
+    end
+    echo -n $symbols
 end
 
 ###############################################################################
