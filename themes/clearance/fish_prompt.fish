@@ -31,6 +31,7 @@ function fish_prompt
   echo -e ''
 
   # Display [venvname] if in a virtualenv
+  set -gx VIRTUAL_ENV_DISABLE_PROMPT 1
   if set -q VIRTUAL_ENV
       echo -n -s (set_color -b cyan black) '[' (basename "$VIRTUAL_ENV") ']' $normal ' '
   end
