@@ -146,10 +146,17 @@ end
 # ===========================
 
 function fish_prompt
-  set -g RETVAL $status
+  if eval $PROMPT_ON_NEWLINE == "true"
+    echo -n "╭─"
+  end
+
   prompt_status
   prompt_user
   prompt_dir
   prompt_git
   prompt_finish
+
+  if eval $PROMPT_ON_NEWLINE == "true"
+    echo -e "\n╰─"
+  end
 end
