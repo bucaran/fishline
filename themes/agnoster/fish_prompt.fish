@@ -146,6 +146,7 @@ end
 # ===========================
 
 function fish_prompt
+  set -g RETVAL $status
   if eval $PROMPT_ON_NEWLINE == "true"
     echo -n "╭─"
   end
