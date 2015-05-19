@@ -147,17 +147,12 @@ end
 
 function fish_prompt
   set -g RETVAL $status
-  if eval $PROMPT_ON_NEWLINE == "true"
-    echo -n "╭─"
-  end
-
-  prompt_status
-  prompt_user
-  prompt_dir
-  prompt_git
-  prompt_finish
-
-  if eval $PROMPT_ON_NEWLINE == "true"
-    echo -e "\n╰─"
-  end
+  # Check for existence and then value of $NEWLINE_ON_PROMPT.
+  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and echo -n "╭─";
+   prompt_status
+   prompt_user
+   prompt_dir
+   prompt_git
+   prompt_finish
+  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and echo -e "\n╰─";
 end
