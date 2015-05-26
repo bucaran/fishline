@@ -154,5 +154,5 @@ function fish_prompt
    prompt_dir
    prompt_git
    prompt_finish
-  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and echo -e "\n╰─";
+  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and set_color -b normal; and echo -e "\n╰─";
 end
