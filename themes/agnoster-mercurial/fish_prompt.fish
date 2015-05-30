@@ -148,6 +148,21 @@ function prompt_git -d "Display the actual git state"
   end
 end
 
+function prompt_rubies -d 'Display current Ruby (rvm/rbenv)'
+  [ "$theme_display_ruby" = 'no' ]; and return
+  set -l ruby_version
+  if type rvm-prompt >/dev/null
+    set ruby_version (rvm-prompt i v g)
+  else if type rbenv >/dev/null
+    set ruby_version (rbenv version-name)
+    # Don't show global ruby version...
+    [ "$ruby_version" = (rbenv global) ]; and return
+  end
+  [ -z "$ruby_version" ]; and return
+
+  prompt_segment red white $ruby_version
+end
+
 function prompt_status -d "the symbols for a non zero exit status, root and background jobs"
     if [ $RETVAL -ne 0 ]
       prompt_segment black red "✘"
@@ -173,6 +188,7 @@ function fish_prompt
   set -g RETVAL $status
   prompt_status
   prompt_virtual_env
+  prompt_rubies
   prompt_user
   prompt_dir
   prompt_hg
