@@ -188,7 +188,7 @@ The following shortcuts need vi mode:
 
 ## Edit commandline with your favorite editor
 
-The function `edit-commandline` let you edit the commandline with your editor.
+The function `edit-commandline` lets you edit the commandline with your editor.
 It makes the commandline as powerful as your editor. If `$EDITOR` is not set,
 vi is used.
 

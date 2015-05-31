@@ -88,7 +88,7 @@ function __budspencer_preexec -d 'Execute after hitting <Enter> before doing any
             and [ $cmd[2] -lt $pcount ]
           end
           commandline $prompt_hist[$cmd[2]]
-          echo $prompt_hist[$cmd[2]] | xsel
+          echo $prompt_hist[$cmd[2]] | xsel -b -i
           commandline -f repaint
           return
         end
@@ -164,7 +164,7 @@ function d -d 'List directory history, jump to directory in list with d <number>
     if [ (expr \( $num_items - $i \) \% 2) -eq 0 ]
       set_color normal
     else
-      set_color $budspencer_colors[4]
+      set_color $budspencer_colors[3]
     end
     echo '▶' (expr $num_items - $i)\t$$dir_hist[1][$i] | sed "s|$HOME|~|"
   end
@@ -237,7 +237,7 @@ function c -d 'List command history, load command from prompt with c <prompt num
     if [ (expr \( $num_items - $i \) \% 2) -eq 0 ]
       set_color normal
     else
-      set_color $budspencer_colors[4]
+      set_color $budspencer_colors[3]
     end
     echo -n '▶ '(expr $num_items - $i)
     set -l item (echo $$cmd_hist[1][$i])
@@ -254,7 +254,7 @@ function c -d 'List command history, load command from prompt with c <prompt num
   switch $cmd_num
     case (seq 0 (expr $num_items - 1))
       commandline $$cmd_hist[1][(expr $num_items - $cmd_num)]
-      echo $$cmd_hist[1][(expr $num_items - $cmd_num)] | xsel
+      echo $$cmd_hist[1][(expr $num_items - $cmd_num)] | xsel -b -i
       for i in (seq (count (echo $$cmd_hist\n)))
         tput cuu1
       end
@@ -305,7 +305,7 @@ function m -d 'List bookmarks, jump to directory in list with m <number>'
       if [ (expr \( $num_items - $i \) \% 2) -eq 0 ]
         set_color normal
       else
-        set_color $budspencer_colors[4]
+        set_color $budspencer_colors[3]
       end
     end
     echo '▶ '(expr $num_items - $i)\t$bookmarks[$i] | sed "s|$HOME|~|"
@@ -372,7 +372,7 @@ end
 function __budspencer_detach_session -d 'Detach current session'
   set cmd_hist cmd_hist_nosession
   set dir_hist dir_hist_nosession
-  if [ -z $$dir_hist ] ^ /dev/null
+  if test -z $$dir_hist ^ /dev/null
     set $dir_hist $PWD
   end
   set dir_hist_val (count $$dir_hist)
@@ -398,7 +398,7 @@ function __budspencer_attach_session -d 'Attach session'
     end
     set cmd_hist budspencer_session_cmd_hist_$argv[1]
     set dir_hist budspencer_session_dir_hist_$argv[1]
-    if [ -z $$dir_hist ] ^ /dev/null
+    if  test -z $$dir_hist ^ /dev/null
       set $dir_hist $PWD
     end
     set dir_hist_val (count $$dir_hist)
@@ -432,7 +432,7 @@ function s -d 'Create, delete or attach session'
         if [ (expr \( $num_items - $i \) \% 2) -eq 0 ]
           set_color normal
         else
-          set_color $budspencer_colors[4]
+          set_color $budspencer_colors[3]
         end
       end
       if contains $budspencer_sessions[$i] $budspencer_sessions_active
@@ -502,13 +502,13 @@ end
 function __budspencer_edit_commandline -d 'Open current commandline with your editor'
   commandline > $budspencer_tmpfile
   eval $EDITOR $budspencer_tmpfile
-  set -l IFS ''
   if [ -s $budspencer_tmpfile ]
-    commandline (sed 's|^\s*||' $budspencer_tmpfile)
+    commandline -- (sed 's|^\s*||' $budspencer_tmpfile)
   else
     commandline ''
   end
   rm $budspencer_tmpfile
+  __budspencer_preexec
 end
 
 ################
