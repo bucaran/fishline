@@ -147,9 +147,12 @@ end
 
 function fish_prompt
   set -g RETVAL $status
-  prompt_status
-  prompt_user
-  prompt_dir
-  prompt_git
-  prompt_finish
+  # Check for existence and then value of $NEWLINE_ON_PROMPT.
+  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and echo -n "╭─";
+   prompt_status
+   prompt_user
+   prompt_dir
+   prompt_git
+   prompt_finish
+  [ $NEWLINE_ON_PROMPT ]; and [ $NEWLINE_ON_PROMPT = "true" ]; and set_color -b normal; and echo -e "\n╰─";
 end
