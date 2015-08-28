@@ -12,8 +12,8 @@
 #   ↑ See XDG Base Directory Specification
 #   → https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 #
-#   OMF_PATH          Oh My Fish directory
-#   OMF_CONFIG        Oh My Fish configuration
+#   OMF_PATH          Oh My Fish! directory
+#   OMF_CONFIG        Oh My Fish! configuration
 #
 #   OMF_REPO_URI      Source git repository
 #   OMF_REPO_BRANCH   Source repository default branch (master)
@@ -48,11 +48,11 @@ omf_create_fish_config() {
 }
 
 omf_install() {
-  echo "Resolving Oh My Fish path → ${OMF_PATH}"
+  echo "Resolving Oh My Fish! path → ${OMF_PATH}"
   test -d "${OMF_PATH}" && die "Existing installation detected, aborting"
   local git_uri="$(echo ${OMF_REPO_URI} | sed 's/\.git//').git"
 
-  echo "Cloning Oh My Fish → ${git_uri}"
+  echo "Cloning Oh My Fish! → ${git_uri}"
   if ! git clone -q --depth 1 -b "${OMF_REPO_BRANCH}" "${git_uri}" "${OMF_PATH}"; then
     echo "Is 'git' installed?"
     die "Could not clone the repository → ${OMF_PATH}:${OMF_REPO_BRANCH}"
@@ -69,7 +69,7 @@ omf_install() {
     git remote set-url upstream ${git_uri}
   fi
 
-  echo "Oh My Fish revision id → ${git_rev}"
+  echo "Oh My Fish! revision id → ${git_rev}"
   popd >/dev/null 2>&1
   test -z ${FISH_CONFIG+_} && FISH_CONFIG="${XDG_CONFIG_HOME}/fish"
 
@@ -88,7 +88,7 @@ omf_install() {
     omf_create_fish_config $fish_config_file
   fi
 
-  echo "Adding Oh My Fish bootstrap → ${fish_config_file}"
+  echo "Adding Oh My Fish! bootstrap → ${fish_config_file}"
   touch ${fish_config_file} >/dev/null 2>&1
   test ! -w ${fish_config_file} && die "Fish configuration file is not writable, aborting."
 
@@ -96,20 +96,21 @@ omf_install() {
     "${OMF_PATH}/templates/config.fish" > "${fish_config_file}"
 
   if [ ! -d "${OMF_CONFIG}" ]; then
-    echo "Writing Oh My Fish configuration → ${OMF_CONFIG}"
-    mkdir -p "${OMF_CONFIG}"
-    touch "${OMF_CONFIG}/theme"
+    echo "Writing Oh My Fish! configuration → ${OMF_CONFIG}"
+    mkdir -p "${OMF_CONFIG}/config"
+    echo "russell" > "${OMF_CONFIG}/config/theme"
+    echo "omf"\n"git" > "${OMF_CONFIG}/config/plugin"
     test -f "${OMF_CONFIG}/revision"  || echo ${git_rev} > "${OMF_CONFIG}/revision"
   fi
 }
 
-echo "Installing Oh My Fish..."
+echo "Installing Oh My Fish!..."
 ! is_installed "fish" && die "Please install fish to continue → http://fishshell.com/"
 if omf_install; then
-  echo "Oh My Fish successfully installed."
+  echo "Oh My Fish! successfully installed."
   cd $HOME
   # Do not swap process if running in a CI environment.
   [ -z ${CI+_} ] || exit 0 && exec "fish" < /dev/tty
 else
-  die "Oh My Fish couldn't install, but you can complain here → git.io/omf-issues"
+  die "Oh My Fish! couldn't install, but you can complain here → git.io/omf-issues"
 fi

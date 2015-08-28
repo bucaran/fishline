@@ -32,7 +32,7 @@ $ {{NAME}}
 
 [mit]:            http://opensource.org/licenses/MIT
 [author]:         http://github.com/{{USER}}
-[contributors]:   https://github.com/{{USER}}/pkg-{{NAME}}/graphs/contributors
+[contributors]:   https://github.com/{{USER}}/plugin-{{NAME}}/graphs/contributors
 [omf-link]:       https://www.github.com/fish-shell/oh-my-fish
 
 [license-badge]:  https://img.shields.io/badge/license-MIT-007EC7.svg?style=flat-square

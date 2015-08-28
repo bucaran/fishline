@@ -9,10 +9,10 @@
 <br>
 
 <p align="center">
-<h1 align="center">:warning: Important :warning:</h1>
-<h4 align="center">
-<a href="https://github.com/wa/wahoo">Wahoo</a> and <a href="https://github.com/oh-my-fish/oh-my-fish">Oh My Fish!</a> are now one project. See this page and <a href="FAQ.md">FAQ</a> to learn what's new.
-</h4>
+:warning:
+<h5 align="center">
+<a href="https://github.com/wa/wahoo">Wahoo</a> and <a href="https://github.com/oh-my-fish/oh-my-fish">Oh My Fish!</a> are now _one_ project. See this page and <a href="FAQ.md">FAQ</a> to learn what's new.
+</h5>
 </p>
 
 <hr>
@@ -22,7 +22,7 @@
 
 <p align="center">
   <a href="https://github.com/fish-shell/oh-my-fish/blob/master/README.md">
-  <img width="160px" src="https://cloud.githubusercontent.com/assets/8317250/8510172/f006f0a4-230f-11e5-98b6-5c2e3c87088f.png">
+  <img width="140px" src="https://cloud.githubusercontent.com/assets/8317250/8510172/f006f0a4-230f-11e5-98b6-5c2e3c87088f.png">
   </a>
 </p>
 
@@ -54,7 +54,7 @@
 
 # About
 
-Oh My Fish is an all-purpose framework for the [fishshell][Fishshell]. It looks after your configuration, themes and packages. It's lightning fast and easy to use.
+Oh My Fish! is an all-purpose framework for [fish][Fishshell]. It looks after your configuration, themes and plugins. It's lightning fast and easy to use.
 
 We love contributions, [fork and send us a PR](https://github.com/fish-shell/oh-my-fish/fork).
 
@@ -75,23 +75,19 @@ chmod +x install
 
 # :beginner: Getting Started
 
-Oh My Fish includes a small utility `omf` to fetch and install new packages and themes.
+Oh My Fish! adds `omf` to your shell to fetch and install new plugins and themes.
 
-## `omf update`
+## `omf install` _`<plugin> ...`_
 
-Update framework and installed packages.
+Install one _or more_ themes or plugins. To list available plugins type `omf theme`.
 
-## `omf install` _`<package> ...`_
-
-Install one _or more_ themes or packages. To list available packages type `omf theme`.
-
-> You can fetch packages by URL as well via `omf install URL`
+> You can fetch plugins by URL as well via `omf install URL`
 
 ## `omf list`
 
-List installed packages.
+List installed plugins.
 
-> To list packages available for download use `omf install`.
+> To list plugins available for download use `omf install`.
 
 ## `omf theme` _`<theme>`_
 
@@ -99,19 +95,23 @@ Apply a theme. To list available themes type `omf theme`.
 
 ## `omf remove` _`<name>`_
 
-Remove a theme or package.
+Remove a theme or plugin.
 
-> Packages subscribed to `uninstall_<pkg>` events are notified before the package is removed to allow custom cleanup of resources. See [Uninstall](#uninstall).
+> Packages subscribed to `uninstall_<plugin>` events are notified before the plugin is removed to allow custom cleanup of resources. See [Uninstall](#uninstall).
 
-## `omf new pkg | theme` _`<name>`_
+## `omf update`
 
-Scaffold out a new package or theme.
+Update framework and installed plugins.
 
-> This creates a new directory under `$OMF_CONFIG/{pkg | themes}/` with a template.
+## `omf new plugin | theme` _`<name>`_
 
-## `omf submit` _`pkg/<name>`_ _`[<url>]`_
+Scaffold out a new plugin or theme.
 
-Add a new package. To add a theme use `omf submit` _`themes/<name>`_ _`<url>`_.
+> This creates a new directory under `$OMF_CONFIG/{plugin | themes}/` with a template.
+
+## `omf submit` _`plugin/<name>`_ _`[<url>]`_
+
+Add a new plugin. To add a theme use `omf submit` _`themes/<name>`_ _`<url>`_.
 
 Make sure to [send us a PR][omf-pulls-link] to update the registry.
 
@@ -121,12 +121,12 @@ Use to inspect all session variables. Useful to  dump _path_ variables like `$fi
 
 ## `omf destroy`
 
-Uninstall Oh My Fish. See [uninstall](#uninstall) for more information.
+Uninstall Oh My Fish!. See [uninstall](#uninstall) for more information.
 
 # :triangular_flag_on_post: Advanced
 + [Startup](#startup)
 + [Core Library](#core-library)
-+ [Packages](#packages)
++ [Packages](#plugins)
   + [Creating](#creating)
   + [Submitting](#submitting)
   + [Initialization](#initialization)
@@ -135,7 +135,7 @@ Uninstall Oh My Fish. See [uninstall](#uninstall) for more information.
 
 ## Startup
 
-This script runs each time a new session begins, autoloading packages, themes and your _config_ path in that order.
+This script runs each time a new session begins, autoloading plugins, themes and your _config_ path in that order.
 
 The _config_ path (`~/.config/omf` by default) is defined by `$OMF_CONFIG` in `~/.config/fish/config.fish`. Modify this to load your own configuration, if you have any, as discussed in the [FAQ](FAQ.md#what-does-oh-my-fish-do-exactly).
 
@@ -147,15 +147,14 @@ The core library is a minimum set of basic utility functions that extend your sh
 
 
 ## Packages
-
 ### Creating
 
-> A package name may only contain lowercase letters and hyphens to separate words.
+> A plugin/theme name may only contain lowercase letters and hyphens to separate words.
 
-To scaffold out a new package:
+To scaffold out a new plugin:
 
 ```fish
-$ omf new pkg my_package
+$ omf new plugin my_package
 
 my_package/
   README.md
@@ -165,13 +164,13 @@ my_package/
 
 > Use `omf new theme my_theme` for themes.
 
-Please provide [auto completion](http://fishshell.com/docs/current/commands.html#complete) for your utilities if applicable and describe how your package works in the `README.md`.
+Please provide [auto completion](http://fishshell.com/docs/current/commands.html#complete) for your utilities if applicable and describe how your plugin works in the `README.md`.
 
 
 `my_package.fish` defines a single function:
 
 ```fish
-function my_package -d "My package"
+function my_package -d "My plugin"
 end
 ```
 
@@ -183,12 +182,12 @@ end
 
 ### Submitting
 
-Oh My Fish keeps a registry of packages under `$OMF_PATH/db/`.
+Oh My Fish! keeps a registry of plugins under `$OMF_PATH/db/`.
 
 To create a new entry run:
 
 ```fish
-omf submit pkg/my_package .../my_package.git
+omf submit plugin/my_package .../my_package.git
 ```
 
 Similarly for themes use:
@@ -202,36 +201,36 @@ This will add a new entry to your local copy of the registry. Please [send us a 
 
 ### Initialization
 
-If you want to be [notified](http://fishshell.com/docs/current/commands.html#emit) when your package loads, declare the following function in your `my_package.fish`:
+If you want to be [notified](http://fishshell.com/docs/current/commands.html#emit) when your plugin loads, create a function in your `my_package.fish` such as:
 
 ```fish
-function init -a path --on-event init_mypkg
+function init -a path --on-event init_myplugin
 end
 ```
 
-Use this event to modify the environment, load resources, autoload functions, etc. If your package does not export any functions, you can still use this event to add functionality to your package.
+Use this event to modify the environment, load resources, autoload functions, etc. If your plugin does not export any functions, you can still use this event to add functionality to your plugin.
 
 ### Uninstall
 
-Oh My Fish emits `uninstall_<pkg>` events before a package is removed via `omf remove <pkg>`. Subscribers can use the event to clean up custom resources, etc.
+Oh My Fish! emits `uninstall_<plugin>` events before a plugin is removed via `omf remove <plugin>`. Subscribers can use the event to clean up custom resources, etc.
 
 ```fish
-function uninstall --on-event uninstall_pkg
+function uninstall --on-event uninstall_plugin
 end
 ```
 
 ### Ignoring
 
-Remove any packages you wish to turn off using `omf remove <package name>`. Alternatively, you can set a global env variable `$OMF_IGNORE` in your `~/.config/fish/config.fish` with the packages you wish to ignore. For example:
+Remove any plugins you wish to turn off using `omf remove <plugin name>`. Alternatively, you can set a global env variable `$OMF_SKIP` in your `~/.config/fish/config.fish` with the plugins you wish to ignore. For example:
 
 ```fish
-set -g OMF_IGNORE skip this that ...
+set -g OMF_SKIP skip this that ...
 ```
 
 
 # License
 
-MIT © [Oh My Fish][contributors] :metal:
+MIT © [Oh My Fish!][contributors] :metal:
 
 [fishshell]: http://fishshell.com
 

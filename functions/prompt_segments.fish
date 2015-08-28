@@ -5,7 +5,7 @@
 #   Extract the root (top-most parent directory), dirname and basename
 #   from fish_prompt
 
-function prompt_segments -d "extract root, dir and base from fish_prompt"
+function prompt_segments -d "Extract root, dir and base from fish_prompt"
   set -l root (prompt_pwd | cut -d "/" -f1)
   if test -z "$root"
     echo "/"

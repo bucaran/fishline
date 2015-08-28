@@ -1,7 +1,7 @@
 function omf.new -a option name
   switch $option
-    case "p" "pkg" "pack" "packg" "package"
-      set option "pkg"
+    case "p" "plugin" "pack" "packg" "package"
+      set option "plugin"
     case "t" "th" "the" "thm" "theme" "themes"
       set option "themes"
     case "*"
@@ -23,7 +23,7 @@ function omf.new -a option name
     set -l user (git config user.name)
     test -z "$user"; and set user "{{USER}}"
 
-    omf.new_from_template "$OMF_PATH/pkg/omf/templates/$option" \
+    omf.new_from_template "$OMF_PATH/plugin/omf/templates/$option" \
       $github $user $name
 
     echo (omf::em)"Switched to $dir"(omf::off)
