@@ -1,8 +1,11 @@
-pkg/**
-!pkg/omf
-!pkg/omf/**
-
-themes/**
-
 .DS_Store
-**/.DS_Store
+
+# Ignore installed plugins and themes
+plugin/**
+theme/**
+
+# Include {omf,git} plugin and contents
+!plugin/omf
+!plugin/omf/**
+!plugin/git
+!plugin/git/**

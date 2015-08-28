@@ -13,4 +13,4 @@ before_script:
   - curl -L git.io/omf | sh
 script:
   - omf g {{NAME}}
-  - cat $OMF_PATH/pkg/{{NAME}}/test/{{NAME}}.fish
+  - cat $OMF_PATH/plugin/{{NAME}}/test/{{NAME}}.fish

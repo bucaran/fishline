@@ -3,9 +3,9 @@
 #   basename [-s suffix] <string> [string...]
 #
 # OVERVIEW
-#   variable arguments basename
+#   Consistent basename across Linux and OS X.
 
-function basename -d "get the filename or directory part of a path"
+function basename -d "Return filename or directory portion of pathname"
   if set -q argv[1]
     set -l ext ""
     switch $argv[1]
