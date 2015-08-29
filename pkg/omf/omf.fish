@@ -57,6 +57,9 @@ function omf -d "Oh My Fish"
     case "-h*" "--h*" "help"
       omf.help
 
+    case "a" "av" "available"
+      omf.list_db_packages | column
+
     case "c" "cd"
       switch (count $argv)
         case 1

@@ -4,6 +4,7 @@ function omf.help
     omf "(omf::em)"action"(omf::off)" [options]
 
   "(omf::dim)"Actions"(omf::off)"
+    "(omf::em)"a"(omf::off)"vailable  List all installable packages.
          "(omf::em)"l"(omf::off)"ist  List local packages.
      "(omf::em)"d"(omf::off)"escribe  Get information about what packages do.
       "(omf::em)"i"(omf::off)"nstall  Install one or more packages.
