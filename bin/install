@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 #
 # USAGE
-#   #1: curl -L git.io/omf | sh
+#   #1: curl -L git.io/omf | bash
 #   #2: curl -L git.io/omf > install && chmod +x install && ./install
-#   #3: OMF_CONFIG=~/.omf curl -L git.io/omf | sh
+#   #3: OMF_CONFIG=~/.omf curl -L git.io/omf | bash
 #
 # ENV
 #   XDG_DATA_HOME       Base directory (~/.local/share)

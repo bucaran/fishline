@@ -61,7 +61,7 @@ We love contributions, [fork and send us a PR](https://github.com/fish-shell/oh-
 # Install
 
 ```fish
-curl -L git.io/omf | sh
+curl -L git.io/omf | bash
 omf help
 ```
 
