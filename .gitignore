@@ -1,0 +1,8 @@
+pkg/**
+!pkg/omf
+!pkg/omf/**
+
+themes/**
+
+.DS_Store
+**/.DS_Store
