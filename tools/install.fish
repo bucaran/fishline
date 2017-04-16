@@ -81,10 +81,13 @@ log blue "Looking for an existing fish config..."
 if test -f $config_path/config.fish
   log green "Found $config_path/config.fish."
   log green "Backing up to $config_path/config.orig"
-  mv $config_path/config.{fish,orig}
+  cp $config_path/config.{fish,orig}
+  log blue "Appending default configuration file to $config_path/config.fish"
+  cat $config_path/config.fish $fish_path/templates/config.fish > $config_path/config.fish
+else
+  log blue "Adding default configuration file to $config_path/config.fish"
+  cp $fish_path/templates/config.fish $config_path/config.fish
 end
-log blue "Adding default configuration file to $config_path/config.fish"
-cp $fish_path/templates/config.fish $config_path/config.fish
 
 # Print nice fish logo with colors.
 log green \
