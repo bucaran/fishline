@@ -1,13 +1,13 @@
 # Path to your oh-my-fish.
-set fish_path $HOME/.oh-my-fish
+set -g OMF_PATH {{OMF_PATH}}
 
-# Path to your custom folder (default path is ~/.oh-my-fish/custom)
-#set fish_custom $HOME/dotfiles/oh-my-fish
+# Path to your oh-my-fish configuration.
+set -g OMF_CONFIG {{OMF_CONFIG}}
+
+### Configuration required to load oh-my-fish ###
+# Note: Only add configurations that are required to be set before oh-my-fish is loaded.
+# For common configurations, we advise you to add them to your $OMF_CONFIG/init.fish file or
+# to create a custom plugin instead.
 
 # Load oh-my-fish configuration.
-. $fish_path/oh-my-fish.fish
-
-# Custom plugins and themes may be added to ~/.oh-my-fish/custom
-# Plugins and themes can be found at https://github.com/oh-my-fish/
-Theme 'robbyrussell'
-Plugin 'theme'
+source $OMF_PATH/init.fish
